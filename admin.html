@@ -128,4 +128,70 @@ document.getElementById("login-btn").onclick = async () => {
   });
 
   if (error) {
-    message.textContent = "Login failed.";
+    message.textContent = "Login failed.";    return;
+  }
+
+  await updateView();
+  message.textContent = "Login successful!";
+};
+
+document.getElementById("create-btn").onclick = async () => {
+  const { data } = await client.auth.getSession();
+
+  if (!data.session) {
+    message.textContent = "Admin login required.";
+    return;
+  }
+
+  const plan = document.getElementById("plan").value;
+  const customerName =
+    document.getElementById("customer-name").value.trim();
+
+  message.textContent = "Creating license...";
+  newLicense.textContent = "";
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL + "/functions/v1/yk-admin-create-license",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + data.session.access_token
+        },
+        body: JSON.stringify({
+          plan,
+          customer_name: customerName
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      message.textContent =
+        result.message || "License creation failed.";
+      return;
+    }
+
+    newLicense.textContent =
+      "License Key: " + result.license.license_key;
+
+    message.textContent = "License created successfully!";
+  } catch (error) {
+    message.textContent = "Connection error.";
+  }
+};
+
+document.getElementById("logout-btn").onclick = async () => {
+  await client.auth.signOut();
+  await updateView();
+  message.textContent = "Logged out.";
+};
+
+updateView();
+</script>
+
+</body>
+</html>
