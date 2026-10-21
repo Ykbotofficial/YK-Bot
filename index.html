@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>YK Bot - Trading Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #101827;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #38e8a5;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aab7ca;
+    }
+
+    .card {
+      background: #1c293b;
+      border: 1px solid #35445a;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin: 16px 0 8px;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 13px;
+      border-radius: 9px;
+      border: none;
+      font-size: 16px;
+    }
+
+    select {
+      background: #101827;
+      color: white;
+      border: 1px solid #52627a;
+    }
+
+    button {
+      margin-top: 18px;
+      background: #38e8a5;
+      color: #101827;
+      font-weight: bold;
+    }
+
+    .signal {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 20px 5px;
+    }
+
+    .note {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #bac5d5;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 25px;
+      color: #8493a8;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>🤖 YK BOT</h1>
+    <p class="subtitle">Trading Analysis Dashboard</p>
+
+    <section class="card">
+      <h2>Market Settings</h2>
+
+      <label for="market">Market Type</label>
+      <select id="market">
+        <option>Live Market</option>
+        <option>OTC Market</option>
+      </select>
+
+      <label for="pair">Trading Pair</label>
+      <select id="pair">
+        <option>EUR/USD</option>
+        <option>GBP/USD</option>
+        <option>USD/JPY</option>
+        <option>AUD/USD</option>
+        <option>USD/CAD</option>
+        <option>EUR/GBP</option>
+        <option>EUR/USD OTC</option>
+        <option>GBP/USD OTC</option>
+        <option>USD/JPY OTC</option>
+      </select>
+
+      <label for="expiry">Expiry Time</label>
+      <select id="expiry">
+        <option value="5 seconds">5 seconds</option>
+        <option value="15 seconds">15 seconds</option>
+        <option value="30 seconds">30 seconds</option>
+        <option value="1 minute">1 minute</option>
+      </select>
+
+      <button onclick="showStatus()">Check Analysis Status</button>
+
+      <div id="signal" class="signal">⏳ WAIT</div>
+      <p id="message" class="note">
+        Real market data connect hone ka intezar hai.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>🔐 License Access</h2>
+      <p class="note">
+        License verification abhi configure nahi hui.
+        Is demo screen se paid access secure nahi hota.
+      </p>
+    </section>
+
+    <p class="note">
+      Risk warning: Yeh abhi dashboard ka demo hai.
+      Ismein real-time market data, verified trading signals
+      ya profitable strategy maujood nahi hai. CALL/PUT signal
+      generate nahi kiya ja raha.
+    </p>
+
+    <footer>YK Bot · Demo Version 0.1</footer>
+  </main>
+
+  <script>
+    function showStatus() {
+      document.getElementById("signal").textContent = "⏳ WAIT";
+
+      document.getElementById("message").textContent =
+        "Abhi real market data connect nahi hai. Isliye koi trading signal nahi diya ja raha.";
+    }
+  </script>
+</body>
+</html>
