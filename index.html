@@ -91,6 +91,7 @@
 </head>
 
 <body>
+  <div id="yk-dashboard" style="display:none;">
   <main class="container">
     <h1>🤖 YK BOT</h1>
     <p class="subtitle">Trading Analysis Dashboard</p>
@@ -150,7 +151,7 @@
 
     <footer>YK Bot · Demo Version 0.1</footer>
   </main>
-
+  </div>
   <script>
     function showStatus() {
       document.getElementById("signal").textContent = "⏳ WAIT";
@@ -229,12 +230,14 @@
       const result = await response.json();
 
       if (response.ok && result.valid === true) {
-        message.textContent =
-          "License valid! Plan: " + result.plan + ".";
-      } else {
-        message.textContent =
-          result.message || "License verify nahi ho saka.";
-      }
+message.textContent =
+"License valid! Plan: " + result.plan + ".";
+document.getElementById("yk-dashboard").style.display = "block";
+} else {
+message.textContent =
+result.message || "License verify nahi ho saka.";
+document.getElementById("yk-dashboard").style.display = "none";
+}
     } catch (error) {
       message.textContent =
         "Connection error. Internet aur settings check karein.";
