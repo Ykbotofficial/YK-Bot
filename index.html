@@ -163,6 +163,85 @@
   document.addEventListener("DOMContentLoaded", function () {
     console.log("YK Bot Version 0.2 ready");
   });
-</script>
-</body>
+</script> 
+<div id="yk-license-panel" style="max-width:400px;margin:30px auto;padding:24px;background:#101827;color:white;border-radius:14px;font-family:Arial,sans-serif;text-align:center;">
+  <h2>YK Bot License</h2>
+  <p>Apni license key enter karein.</p>
+  <input id="yk-license-key" type="text" placeholder="Enter License Key"
+    style="width:90%;padding:12px;margin:10px 0;border-radius:7px;border:1px solid #555;">
+  <button id="yk-verify-btn"
+    style="width:98%;padding:12px;background:#16a34a;color:white;border:0;border-radius:7px;font-weight:bold;">
+    Verify License
+  </button>
+  <p id="yk-license-message" role="status"></p>
+</div><script>
+(function () {
+  const PROJECT_URL = "https://fnybcoirsjosoanneegt.supabase.co";
+  const PUBLISHABLE_KEY = "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
+
+  const button = document.getElementById("yk-verify-btn");
+  const message = document.getElementById("yk-license-message");
+
+  function getDeviceId() {
+    let id = localStorage.getItem("yk_device_id");
+    if (!id) {
+      id = (crypto.randomUUID)
+        ? crypto.randomUUID()
+        : "yk-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+      localStorage.setItem("yk_device_id", id);
+    }
+    return id;
+  }
+
+  button.addEventListener("click", async function () {
+    const licenseKey = document.getElementById("yk-license-key").value.trim();
+
+    if (!licenseKey) {
+      message.textContent = "Pehle license key enter karein.";
+      return;
+    }
+
+    if (PUBLISHABLE_KEY === "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE") {
+      message.textContent = "Setup pending: Publishable Key add karein.";
+      return;
+    }
+
+    button.disabled = true;
+    message.textContent = "License check ho raha hai...";
+
+    try {
+      const response = await fetch(
+        PROJECT_URL + "/functions/v1/yk-verify-license",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": PUBLISHABLE_KEY,
+            "Authorization": "Bearer " + PUBLISHABLE_KEY
+          },
+          body: JSON.stringify({
+            license_key: licenseKey,
+            device_id: getDeviceId()
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok && result.valid === true) {
+        message.textContent =
+          "License valid! Plan: " + result.plan + ".";
+      } else {
+        message.textContent =
+          result.message || "License verify nahi ho saka.";
+      }
+    } catch (error) {
+      message.textContent =
+        "Connection error. Internet aur settings check karein.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
+</script></body>
 </html>
