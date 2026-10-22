@@ -282,7 +282,9 @@ const strategyFunction = "yk-multi-strategy";
           "apikey": "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR",
           "Authorization": "Bearer sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR"
         },
-        body: JSON.stringify({})
+        body: JSON.stringify({
+  timeframe: document.getElementById("timeframe").value
+})
       }
     );
 
