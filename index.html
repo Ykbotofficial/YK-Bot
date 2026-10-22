@@ -258,9 +258,7 @@ async function checkTradingSignal() {
   const market = document.getElementById("market").value;
   const pair = document.getElementById("pair").value;
 const timeframe = document.getElementById("timeframe").value;
-const strategyFunction = timeframe === "5min"
-  ? "yk-strategy-5min"
-  : "yk-trading-strategy";
+const strategyFunction = "yk-multi-strategy";
   if (market !== "Live Market" || pair !== "EUR/USD") {
     signalBox.textContent = "⏳ WAIT";
     messageBox.textContent =
