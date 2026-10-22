@@ -283,6 +283,10 @@ const strategyFunction = "yk-multi-strategy";
           "Authorization": "Bearer sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR"
         },
         body: JSON.stringify({
+  timeframe: timeframe,
+  license_key: document.getElementById("yk-license-key").value.trim(),
+  device_id: localStorage.getItem("yk_device_id")
+})
   timeframe: document.getElementById("timeframe").value
 })
       }
