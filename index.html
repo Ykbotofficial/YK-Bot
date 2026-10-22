@@ -126,7 +126,7 @@
         <option value="1 minute">1 minute</option>
       </select>
 
-      <button onclick="showStatus()">Check Analysis Status</button>
+      <button onclick="checkTradingSignal()">Check Live Signal (EMA + RSI)</button>
 
       <div id="signal" class="signal">⏳ WAIT</div>
       <p id="message" class="note">
@@ -246,6 +246,69 @@ document.getElementById("yk-dashboard").style.display = "none";
     }
   });
 })();
+</script>
+  <script>
+async function checkTradingSignal() {
+  const signalBox = document.getElementById("signal");
+  const messageBox = document.getElementById("message");
+  const market = document.getElementById("market").value;
+  const pair = document.getElementById("pair").value;
+
+  if (market !== "Live Market" || pair !== "EUR/USD") {
+    signalBox.textContent = "⏳ WAIT";
+    messageBox.textContent =
+      "EMA + RSI strategy filhal sirf EUR/USD Live Market ke liye hai.";
+    return;
+  }
+
+  signalBox.textContent = "⏳ ANALYZING...";
+  messageBox.textContent = "Market data check ho raha hai...";
+
+  try {
+    const response = await fetch(
+      "https://fnybcoirsjosoanneegt.supabase.co/functions/v1/yk-trading-strategy",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR",
+          "Authorization": "Bearer sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR"
+        },
+        body: JSON.stringify({})
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Strategy error");
+    }
+
+    if (!["BUY", "SELL", "WAIT"].includes(result.signal)) {
+      throw new Error("Invalid signal");
+    }
+
+    const icons = {
+      BUY: "🟢",
+      SELL: "🔴",
+      WAIT: "⏳"
+    };
+
+    signalBox.textContent =
+      icons[result.signal] + " " + result.signal;
+
+    messageBox.textContent =
+      "EMA 9: " + result.ema9 +
+      " | EMA 21: " + result.ema21 +
+      " | RSI: " + result.rsi +
+      " | Experimental strategy";
+
+  } catch (error) {
+    signalBox.textContent = "⏳ WAIT";
+    messageBox.textContent =
+      "Market signal nahi mil saka. Dobara try karein.";
+  }
+}
 </script>
 </body>
 </html>
