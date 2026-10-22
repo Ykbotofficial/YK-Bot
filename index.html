@@ -129,7 +129,7 @@
         <option value="30 seconds">30 seconds</option>
         <option value="1 minute">1 minute</option>
       </select>
-
+<button onclick="ykLogout()">Logout</button>
       <button onclick="checkTradingSignal()">Check Live Signal (EMA + RSI)</button>
 
       <div id="signal" class="signal">⏳ WAIT</div>
@@ -328,6 +328,15 @@ messageBox.textContent =
     messageBox.textContent =
       "Market signal nahi mil saka. Dobara try karein.";
   }
+}
+</script>
+  <script>
+function ykLogout() {
+  document.getElementById("yk-dashboard").style.display = "none";
+  document.getElementById("yk-license-key").value = "";
+  document.getElementById("yk-license-message").textContent =
+    "Logout ho gaya. Dobara login karne ke liye license key enter karein.";
+  window.scrollTo(0, 0);
 }
 </script>
 </body>
