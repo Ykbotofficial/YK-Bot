@@ -136,6 +136,9 @@
       <p id="message" class="note">
         Real market data connect hone ka intezar hai.
       </p>
+      <p id="strategyDetails" class="note">
+  EMA + RSI: WAIT | MACD: WAIT | Support/Resistance: WAIT
+</p>
     </section>
 
     <section class="card">
@@ -284,7 +287,14 @@ const strategyFunction = "yk-multi-strategy";
     );
 
     const result = await response.json();
+const strategyBox = document.getElementById("strategyDetails");
 
+if (strategyBox && result.strategies) {
+strategyBox.textContent =
+"EMA + RSI: " + result.strategies.emaRsi +
+" | MACD: " + result.strategies.macd +
+" | Support/Resistance: " + result.strategies.supportResistance;
+}
     if (!response.ok || !result.success) {
       throw new Error(result.message || "Strategy error");
     }
