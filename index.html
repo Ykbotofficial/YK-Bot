@@ -303,10 +303,10 @@ const strategyFunction = "yk-multi-strategy";
       icons[result.signal] + " " + result.signal;
 
     messageBox.textContent =
-      "EMA 9: " + result.ema9 +
-      " | EMA 21: " + result.ema21 +
-      " | RSI: " + result.rsi +
-      " | Experimental strategy";
+    "EMA 9: " + result.indicators.ema9 +
+" | EMA 21: " + result.indicators.ema21 +
+" | RSI: " + result.indicators.rsi +
+" | EMA + RSI, MACD & Support/Resistance (Experimental)";
 
   } catch (error) {
     signalBox.textContent = "⏳ WAIT";
