@@ -295,9 +295,9 @@ const strategyBox = document.getElementById("strategyDetails");
 
 if (strategyBox && result.strategies) {
 strategyBox.textContent =
-"EMA + RSI: " + result.strategies.emaRsi +
+"EMA + RSI: " + result.strategies.ema_rsi +
 " | MACD: " + result.strategies.macd +
-" | Support/Resistance: " + result.strategies.supportResistance;
+" | Support/Resistance: " + result.strategies.support_resistance;
 }
     if (!response.ok || !result.success) {
       throw new Error(result.message || "Strategy error");
