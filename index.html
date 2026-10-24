@@ -2,542 +2,770 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#071225">
-<title>YK BOT | Premium Trading Terminal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#03091b">
+<title>YK BOT — AI Trading System</title>
 
 <style>
-*{box-sizing:border-box}
-:root{
-  --bg:#050b18;
-  --panel:#0b1730;
-  --line:#244b83;
-  --blue:#38b6ff;
-  --green:#45f0b0;
-  --red:#ff5277;
-  --gold:#ffd166;
-  --text:#edf6ff;
-  --muted:#91a9c9
+:root {
+  --bg:#030817;
+  --panel:#07132b;
+  --panel2:#091a38;
+  --blue:#087cff;
+  --cyan:#00e5ff;
+  --purple:#9b4dff;
+  --green:#00f5b0;
+  --red:#ff426c;
+  --text:#edf5ff;
+  --muted:#91a9ce;
+  --border:#123c83;
 }
+*{box-sizing:border-box}
 body{
   margin:0;
-  min-height:100vh;
-  font-family:Arial,sans-serif;
+  background:radial-gradient(ellipse at top,#10285b 0%,#030817 48%,#020510 100%);
   color:var(--text);
-  background:radial-gradient(ellipse at 50% 0%,#123c78,transparent 55%),linear-gradient(160deg,#050b18,#071225 65%,#030712);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
 }
-button,input,select{font:inherit}
+button,select,input{font:inherit}
 button{cursor:pointer}
-.container{width:min(100% - 24px,1180px);margin:auto;padding:18px 0 40px}
-.brand{
-  display:flex;align-items:center;gap:14px;
-  padding:12px 4px 20px;border-bottom:1px solid #244b8366;
-  margin-bottom:16px
+button:focus-visible,select:focus-visible,input:focus-visible{
+  outline:2px solid var(--cyan);outline-offset:2px
 }
+.app{max-width:1500px;margin:auto;padding:12px}
+.panel{
+  background:linear-gradient(145deg,rgba(10,27,59,.97),rgba(3,10,28,.98));
+  border:1px solid var(--border);
+  border-radius:18px;
+  box-shadow:0 0 15px #005dff18,inset 0 0 20px #005dff08;
+}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:16px 20px;margin-bottom:14px;
+  border-color:#1b54ad;box-shadow:0 0 20px #0066ff24;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
 .logo{
-  width:54px;height:54px;flex:0 0 54px;
-  display:grid;place-items:center;border-radius:16px;
-  background:linear-gradient(135deg,#123d80,#10172f);
-  border:1px solid #399cff;box-shadow:0 0 28px #168bff40;
-  font-size:27px
+  font-size:42px;font-weight:1000;font-style:italic;line-height:1;
+  color:var(--cyan);text-shadow:0 0 12px #008cff;
 }
-h1{font-size:25px;letter-spacing:3px;color:#65caff;margin:0 0 5px}
-.subtitle{font-size:10px;color:var(--muted);letter-spacing:1.4px}
-.statusline{display:flex;gap:7px;align-items:center;margin-top:8px;font-size:10px;color:#a9c8ee}
-.dot{width:7px;height:7px;border-radius:50%;background:#45f0b0;box-shadow:0 0 10px #45f0b0}
-.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:16px;align-items:start}
-.card{
-  min-width:0;padding:20px;border-radius:19px;
-  background:linear-gradient(145deg,#101f3bef,#091328f7);
-  border:1px solid #244b83;box-shadow:0 15px 40px #0006;
-  margin-bottom:16px
+.brand h1{font-size:25px;margin:0;letter-spacing:2px}
+.brand p{font-size:11px;letter-spacing:3px;color:#42aaff;margin:5px 0 0}
+.top-right{display:flex;align-items:center;gap:12px}
+.live{
+  display:flex;align-items:center;gap:8px;color:var(--green);
+  font-size:13px;white-space:nowrap
 }
-.card h2{font-size:16px;margin:0 0 17px;color:#e4f2ff}
-.badge{
-  font-size:9px;padding:7px 9px;border-radius:8px;
-  color:#75d2ff;background:#0b2a4c;border:1px solid #246ab0
+.dot{
+  width:10px;height:10px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 12px var(--green)
 }
-.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.chart-shell{
-  position:relative;background:#061126;border:1px solid #28528b;
-  border-radius:14px;overflow:hidden
+.clock{font-variant-numeric:tabular-nums;color:#69c9ff}
+.icon-btn,.nav-btn,.secondary-btn{
+  background:#07152f;color:var(--text);border:1px solid #16458e;
+  border-radius:10px;padding:10px 12px
 }
-.chart-label{position:absolute;top:10px;left:11px;font-size:11px;color:#d3eaff;z-index:1}
-.chart-tag{position:absolute;right:10px;top:9px;font-size:9px;color:#70d2ff;z-index:1}
-#miniChart{width:100%;height:300px;display:block}
-label{display:block;margin:15px 0 7px;font-size:12px;font-weight:bold;color:#a9c8ee}
-input,select{
-  width:100%;padding:14px;border-radius:11px;
-  border:1px solid #2b4f7e;background:#071329;color:#f3f8ff;
-  outline:none
+.layout{display:grid;grid-template-columns:86px minmax(0,1fr);gap:12px}
+.sidebar{
+  display:flex;flex-direction:column;gap:8px;padding:9px;
+  align-self:start;position:sticky;top:10px
 }
-input:focus,select:focus{border-color:#48baff;box-shadow:0 0 0 3px #168bff22}
-button{
-  border-radius:12px;padding:14px;width:100%;
-  border:1px solid transparent;font-weight:bold
+.nav-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:7px;min-height:76px;font-size:12px;color:#b6c9e8
 }
-.primary{
-  margin-top:20px;color:white;
-  background:linear-gradient(100deg,#1269ff,#28baff 55%,#657bff);
-  border-color:#76d4ff;box-shadow:0 0 22px #168bff35
+.nav-btn .nav-icon{font-size:25px;color:#39aaff}
+.nav-btn.active{
+  border-color:var(--cyan);color:white;
+  box-shadow:0 0 14px #007bff55;background:#0b2860
 }
-.primary:disabled{opacity:.6;cursor:wait}
-.logout{margin-top:12px;background:#12233e;color:#c8ddf7;border-color:#2b4f7e}
-.signal{
-  margin-top:16px;padding:23px 8px;text-align:center;
-  font-size:33px;font-weight:900;letter-spacing:2px;
-  border-radius:14px;background:#071124;border:1px solid #294a77
+.main{min-width:0}
+.chart-panel{padding:10px;margin-bottom:14px;overflow:hidden}
+.chart-head{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;padding:4px 5px 12px
 }
-.signal.buy{color:#45f0b0;border-color:#35dca0;box-shadow:0 0 25px #35dca022}
-.signal.sell{color:#ff6687;border-color:#ff5277;box-shadow:0 0 25px #ff527722}
-.signal.wait{color:#ffd166}
-.note{font-size:12px;line-height:1.7;color:var(--muted);overflow-wrap:anywhere}
-#yk-license-panel{
-  width:min(92%,430px);margin:9vh auto;padding:26px 22px;
-  background:linear-gradient(145deg,#102447,#070f21);
-  border:1px solid #328eff;border-radius:22px;text-align:center;
-  box-shadow:0 0 55px #168bff25
+.chart-head h2{font-size:16px;margin:0}
+.chart-head select{max-width:150px}
+select,input{
+  color:#edf5ff;background:#06142e;border:1px solid #1752a5;
+  border-radius:10px;padding:11px;width:100%;min-width:0
 }
-#yk-license-panel .logo{margin:auto}
-#yk-license-panel h2{color:#69caff;letter-spacing:2px}
-#yk-license-message{font-size:13px;line-height:1.6;color:#c4d6e7}
-#analysisOverlay{
-  display:none;position:fixed;inset:0;z-index:1000;
-  align-items:center;justify-content:center;padding:15px;
-  background:#020712f5;backdrop-filter:blur(12px)
+.chart-wrap{height:360px;min-height:300px;overflow:hidden;border-radius:10px}
+.chart-wrap iframe{display:block;width:100%;height:100%;border:0}
+.section-title{
+  font-size:18px;margin:0 0 16px;display:flex;align-items:center;gap:10px
 }
-#analysisOverlay.active{display:flex}
-.analysis-panel{
-  width:min(100%,520px);padding:22px;border-radius:20px;
-  background:linear-gradient(145deg,#102447,#070f21);
-  border:1px solid #328eff;box-shadow:0 0 55px #168bff30
+.section-title span{font-size:23px;color:var(--cyan)}
+.work-grid{
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.9fr);
+  gap:14px;margin-bottom:14px
 }
-.analysis-title{text-align:center;font-size:19px;font-weight:bold;color:#69caff}
-.analysis-sub{text-align:center;color:var(--muted);font-size:10px;margin:9px 0 15px}
-#analysisChart{display:block;width:100%;height:210px;background:#061126;border:1px solid #28528b;border-radius:12px}
-.progress{height:6px;background:#23374b;border-radius:20px;overflow:hidden;margin:17px 0 12px}
-.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#1269ff,#38caff,#8b83ff);transition:width .3s}
-#analysisStatus{text-align:center;min-height:34px;font-size:13px;color:#d9e9f6}
-footer{text-align:center;color:#7e9cc3;font-size:11px;padding:20px 0}
-@media(max-width:760px){
- .container{width:calc(100% - 20px);padding-top:10px}
- .layout{display:flex;flex-direction:column}
- .layout>div{width:100%}
- .card{padding:16px;border-radius:16px}
- #miniChart{height:230px}
- h1{font-size:22px;letter-spacing:2px}
- .logo{width:48px;height:48px;flex-basis:48px;font-size:23px}
- .signal{font-size:30px}
+.settings-panel,.analysis-panel{padding:18px;min-width:0}
+.field{margin-bottom:16px}
+.field label{
+  display:block;color:#a8c9f3;font-size:13px;margin-bottom:8px
+}
+.timeframes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tf-btn{
+  background:#06142e;border:1px solid #163e82;color:#c9dafa;
+  border-radius:10px;padding:13px 3px
+}
+.tf-btn.active{
+  background:linear-gradient(135deg,#076cff,#0645bc);
+  color:white;border-color:var(--cyan);box-shadow:0 0 14px #007bff66
+}
+.primary-btn{
+  width:100%;padding:16px 10px;border-radius:12px;
+  border:1px solid #63edff;color:white;font-weight:bold;font-size:16px;
+  background:linear-gradient(100deg,#0756e8,#008fff,#0756e8);
+  box-shadow:0 0 18px #007bff50
+}
+.primary-btn:disabled{opacity:.55;cursor:wait}
+.notice{color:var(--muted);font-size:12px;line-height:1.55;margin:12px 0 0}
+.confidence-wrap{display:flex;justify-content:center;margin:18px 0}
+.confidence{
+  width:148px;height:148px;border-radius:50%;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle,#081a3b 55%,#06112a 57%);
+  border:8px solid #0b3982;box-shadow:0 0 18px #007bff55;
+  position:relative
+}
+.confidence:before{
+  content:"";position:absolute;inset:-8px;border-radius:50%;
+  border:5px solid transparent;border-top-color:var(--cyan);
+  border-right-color:#137cff;transform:rotate(-25deg)
+}
+.confidence strong{font-size:34px}
+.confidence small{font-size:12px;color:#a9c6ed;margin-top:4px}
+.metric-list{border-top:1px solid #173d78}
+.metric{
+  display:flex;justify-content:space-between;gap:10px;padding:12px 2px;
+  border-bottom:1px solid #102d5d;font-size:13px
+}
+.metric span:first-child{color:#aac6eb}
+.metric strong{color:#b4c8e6;text-align:right}
+.metric strong.up{color:var(--green)}
+.metric strong.down{color:var(--red)}
+.signal-panel{
+  padding:16px;border-color:#087d96;
+  box-shadow:0 0 18px #00d5ff15
+}
+.signal-main{
+  display:grid;grid-template-columns:1fr 1.2fr  .75fr;gap:10px;
+  align-items:stretch;margin-bottom:12px
+}
+.signal-box{
+  border:1px solid #135080;background:#06132a;border-radius:13px;
+  padding:15px 10px;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;min-width:0
+}
+.signal-box.call{border-color:#008b76}
+.signal-box.put{border-color:#a33255}
+.signal-word{font-size:30px;font-weight:900;color:#8ca1bd}
+.signal-word.buy{color:var(--green);text-shadow:0 0 15px #00ffb155}
+.signal-word.sell{color:var(--red);text-shadow:0 0 15px #ff426c55}
+.signal-sub{font-size:12px;color:#a9c6e9;margin-top:4px}
+.signal-pair{font-weight:bold;word-break:break-word}
+.signal-confidence{font-size:26px;font-weight:bold;color:var(--cyan);margin-top:5px}
+.signal-stats{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px
+}
+.stat{
+  padding:15px 8px;text-align:center;border:1px solid #143b70;
+  border-radius:12px;background:#06142b
+}
+.stat-label{font-size:12px;color:#73c9ff}
+.stat-value{font-size:15px;margin-top:7px;font-weight:bold}
+.license-panel{padding:18px;margin-top:14px}
+.license-row{display:flex;gap:8px}
+.license-row input{flex:1}
+.status-message{font-size:13px;line-height:1.5;margin-top:10px;color:var(--muted)}
+.footer{text-align:center;padding:20px 5px;color:#5585c5;font-size:12px}
+.hidden{display:none!important}
+@media(max-width:850px){
+ .app{padding:8px}
+ .layout{grid-template-columns:1fr}
+ .sidebar{
+  position:static;flex-direction:row;justify-content:space-around;
+  padding:6px;gap:5px
+ }
+ .nav-btn{flex:1;min-height:58px;padding:7px 3px;font-size:11px}
+ .nav-btn .nav-icon{font-size:21px}
+ .work-grid{grid-template-columns:1fr}
+ .chart-wrap{height:330px}
+ .topbar{padding:13px}
+ .brand h1{font-size:21px}
+ .brand p{font-size:9px;letter-spacing:1.5px}
+ .logo{font-size:34px}
+ .top-right{gap:8px}
+}
+@media(max-width:430px){
+ .topbar{gap:6px;padding:11px}
+ .brand{gap:7px}
+ .brand h1{font-size:17px;letter-spacing:1px}
+ .brand p{font-size:8px;letter-spacing:1px}
+ .logo{font-size:30px}
+ .clock{display:none}
+ .top-right{gap:6px}
+ .chart-wrap{height:290px;min-height:260px}
+ .settings-panel,.analysis-panel{padding:14px}
+ .signal-main{grid-template-columns:1fr 1fr}
+ .signal-box:last-child{grid-column:1/-1}
+ .signal-word{font-size:25px}
+ .signal-stats{gap:6px}
+ .stat{padding:12px 4px}
+ .stat-label{font-size:10px}
+ .stat-value{font-size:13px}
 }
 </style>
 </head>
 
 <body>
-<div id="yk-license-panel">
-  <div class="logo">🤖</div>
-  <h2>YK BOT</h2>
-  <p class="note">PREMIUM TRADING TERMINAL</p>
-  <p class="note">Enter your license key to unlock your dashboard.</p>
-  <input id="yk-license-key" type="text" placeholder="Enter License Key" autocomplete="off">
-  <button id="yk-verify-btn" class="primary">🔐 VERIFY LICENSE</button>
-  <p id="yk-license-message" role="status"></p>
-</div>
+<div class="app">
 
-<div id="yk-dashboard" style="display:none">
-<main class="container">
-<header class="brand">
-  <div class="logo">🤖</div>
-  <div>
-    <h1>YK BOT</h1>
-    <div class="subtitle">PREMIUM TRADING TERMINAL</div>
-    <div class="statusline"><span class="dot"></span> TRADING ANALYSIS SYSTEM</div>
+<header class="topbar panel">
+  <div class="brand">
+    <div class="logo">YK</div>
+    <div>
+      <h1>YK BOT</h1>
+      <p>AI TRADING SYSTEM</p>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="live"><span class="dot"></span> Live</div>
+    <div class="clock" id="clock">--:--:--</div>
+    <button class="icon-btn" id="settingsJump" aria-label="Settings">⚙</button>
   </div>
 </header>
 
 <div class="layout">
-<div>
-<section class="card">
-  <div class="headrow">
-    <h2>📊 Market Overview</h2>
-    <span class="badge">CHART DISPLAY</span>
-  </div>
-  <div class="chart-shell">
-    <span id="chartPairLabel" class="chart-label">EUR/USD · DEMO</span>
-    <span class="chart-tag">VISUAL DEMO</span>
-    <canvas id="miniChart"></canvas>
-  </div>
-  <p class="note">The animated chart is illustrative only and does not show live market prices.</p>
-</section>
+  <nav class="sidebar panel" aria-label="Main navigation">
+    <button class="nav-btn active" data-target="home"><span class="nav-icon">⌂</span>Home</button>
+    <button class="nav-btn" data-target="signals"><span class="nav-icon">↗</span>Signals</button>
+    <button class="nav-btn" data-target="analysis"><span class="nav-icon">♧</span>Analysis</button>
+    <button class="nav-btn" data-target="license"><span class="nav-icon">⚙</span>Settings</button>
+  </nav>
 
-<section class="card">
-  <h2>🧠 Trading Information</h2>
-  <p class="note">Signals are requested from your existing Supabase strategy. No signal guarantees profit. Test using a demo account first.</p>
-  <p id="strategyDetails" class="note">EMA + RSI: WAIT | MACD: WAIT | Support/Resistance: WAIT</p>
-  <p id="message" class="note">Ready to analyze market data.</p>
-</section>
+  <main class="main" id="home">
+    <section class="chart-panel panel">
+      <div class="chart-head">
+        <h2>📈 LIVE MARKET CHART</h2>
+        <select id="chartPair" aria-label="Chart trading pair">
+          <option value="FX:EURUSD">🇺🇸 EUR/USD</option>
+          <option value="FX:GBPUSD">🇬🇧 GBP/USD</option>
+          <option value="FX:USDJPY">🇯🇵 USD/JPY</option>
+          <option value="FX:AUDUSD">🇦🇺 AUD/USD</option>
+          <option value="FX:USDCHF">🇨🇭 USD/CHF</option>
+        </select>
+        <select id="chartTf" aria-label="Chart timeframe">
+          <option value="1">1m</option>
+          <option value="5">5m</option>
+          <option value="15">15m</option>
+          <option value="30">30m</option>
+          <option value="60">1h</option>
+          <option value="240">4h</option>
+        </select>
+      </div>
+      <div class="chart-wrap">
+        <iframe id="chartFrame" title="TradingView market chart"
+          loading="lazy" allowfullscreen
+          src="https://www.tradingview.com/widgetembed/?symbol=FX%3AEURUSD&interval=1&hidesidetoolbar=1&symboledit=1&saveimage=0&toolbarbg=%23071830&theme=dark&style=1&timezone=Asia%2FKarachi&withdateranges=1&hideideas=1&studies=%5B%5D">
+        </iframe>
+      </div>
+      <p class="notice">Chart TradingView se load hota hai. Market data ki availability provider aur region par depend karti hai.</p>
+    </section>
+
+    <div class="work-grid">
+      <section class="settings-panel panel" id="marketSettings">
+        <h2 class="section-title"><span>⚙</span> Market Settings</h2>
+
+        <div class="field">
+          <label for="marketType">Market Type</label>
+          <select id="marketType">
+            <option value="Live Market">🟢 Live Market</option>
+            <option value="OTC">OTC</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="pair">Trading Pair</label>
+          <select id="pair">
+            <option value="EUR/USD">🇺🇸 EUR/USD</option>
+            <option value="GBP/USD">🇬🇧 GBP/USD</option>
+            <option value="USD/JPY">🇯🇵 USD/JPY</option>
+            <option value="AUD/USD">🇦🇺 AUD/USD</option>
+            <option value="USD/CHF">🇨🇭 USD/CHF</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Trading Timeframe</label>
+          <div class="timeframes">
+            <button class="tf-btn active" data-tf="1m">1m</button>
+            <button class="tf-btn" data-tf="5m">5m</button>
+            <button class="tf-btn" data-tf="15m">15m</button>
+            <button class="tf-btn" data-tf="30m">30m</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="expiry">Expiry Time</label>
+          <select id="expiry">
+            <option value="5 seconds">5 seconds</option>
+            <option value="15 seconds">15 seconds</option>
+            <option value="30 seconds">30 seconds</option>
+            <option value="1 minute">1 minute</option>
+            <option value="5 minutes">5 minutes</option>
+          </select>
+        </div>
+
+        <button class="primary-btn" id="generate">⚡ GENERATE SIGNAL</button>
+        <p class="notice">Signal ke liye valid license key zaroori hai. Signal prediction hai, profit ki guarantee nahi.</p>
+      </section>
+
+      <section class="analysis-panel panel" id="analysis">
+        <h2 class="section-title"><span>♧</span> AI Analysis</h2>
+
+        <div class="confidence-wrap">
+          <div class="confidence">
+            <strong id="confidence">--</strong>
+            <small>Confidence</small>
+          </div>
+        </div>
+
+        <div class="metric-list">
+          <div class="metric"><span>Trend</span><strong id="trend">Awaiting signal</strong></div>
+          <div class="metric"><span>RSI (14)</span><strong id="rsi">--</strong></div>
+          <div class="metric"><span>MACD</span><strong id="macd">--</strong></div>
+          <div class="metric"><span>Support</span><strong id="support">--</strong></div>
+          <div class="metric"><span>Resistance</span><strong id="resistance">--</strong></div>
+          <div class="metric"><span>Signal</span><strong id="analysisSignal">WAIT</strong></div>
+        </div>
+
+        <p class="notice" id="analysisMessage">Generate Signal dabao. Analysis backend se milne par yahan show hogi.</p>
+      </section>
+    </div>
+
+    <section class="signal-panel panel" id="signals">
+      <h2 class="section-title"><span>⚡</span> Trading Signal</h2>
+
+      <div class="signal-main">
+        <div class="signal-box call" id="signalBox">
+          <div class="signal-word" id="signalWord">WAIT</div>
+          <div class="signal-sub" id="signalSub">Signal pending</div>
+        </div>
+
+        <div class="signal-box">
+          <div class="signal-pair" id="signalPair">EUR/USD</div>
+          <div class="signal-sub" id="signalTime">1m · 5 seconds</div>
+          <div class="signal-sub" id="signalMarket">Live Market</div>
+        </div>
+
+        <div class="signal-box">
+          <div class="signal-sub">Confidence</div>
+          <div class="signal-confidence" id="signalConfidence">--</div>
+        </div>
+      </div>
+
+      <div class="signal-stats">
+        <div class="stat">
+          <div class="stat-label">📊 Strategy</div>
+          <div class="stat-value" id="strategyStat">Not run</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">⏱ Timeframe</div>
+          <div class="stat-value" id="timeframeStat">1m</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">🔐 License</div>
+          <div class="stat-value" id="licenseStat">Not verified</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="license-panel panel" id="license">
+      <h2 class="section-title"><span>🔐</span> License Verification</h2>
+      <div class="field">
+        <label for="licenseKey">Your License Key</label>
+        <div class="license-row">
+          <input id="licenseKey" type="text" autocomplete="off"
+            placeholder="Enter your YK BOT license key">
+          <button class="secondary-btn" id="verifyBtn">Verify</button>
+        </div>
+      </div>
+      <div class="status-message" id="licenseMessage" role="status">
+        License verify karne ke liye apni key enter karein.
+      </div>
+      <p class="notice">License key sirf official YK BOT administrator se hasil karein. Apni key kisi aur ko share na karein.</p>
+    </section>
+
+    <footer class="footer">YK BOT · AI Trading Dashboard</footer>
+  </main>
 </div>
-
-<div>
-<section class="card">
-  <h2>⚙️ Market Settings</h2>
-
-  <label for="market">Market Type</label>
-  <select id="market">
-    <option>Live Market</option>
-    <option>OTC Market</option>
-  </select>
-
-  <label for="pair">Trading Pair</label>
-  <select id="pair">
-    <option>EUR/USD</option>
-    <option>GBP/USD</option>
-    <option>USD/JPY</option>
-    <option>AUD/USD</option>
-    <option>USD/CAD</option>
-    <option>EUR/GBP</option>
-    <option>EUR/USD OTC</option>
-    <option>GBP/USD OTC</option>
-    <option>USD/JPY OTC</option>
-  </select>
-
-  <label for="timeframe">Trading Timeframe</label>
-  <select id="timeframe">
-    <option value="1min">1 Minute</option>
-    <option value="5min">5 Minutes</option>
-  </select>
-
-  <label for="expiry">Expiry Time</label>
-  <select id="expiry">
-    <option value="5 seconds">5 seconds</option>
-    <option value="15 seconds">15 seconds</option>
-    <option value="30 seconds">30 seconds</option>
-    <option value="1 minute">1 minute</option>
-  </select>
-
-  <button id="generateBtn" class="primary" onclick="checkTradingSignal()">📡 GENERATE TRADING SIGNAL</button>
-  <div id="signal" class="signal wait">⏳ WAIT</div>
-  <button class="logout" onclick="ykLogout()">🚪 LOGOUT</button>
-</section>
-</div>
-</div>
-
-<footer>YK BOT • PREMIUM TRADING TERMINAL<br><br>Trading involves risk.</footer>
-</main>
-</div>
-
-<div id="analysisOverlay" role="status" aria-live="polite">
-  <div class="analysis-panel">
-    <div class="analysis-title">🤖 YK BOT ANALYSIS</div>
-    <div class="analysis-sub">REQUESTING TRADING SIGNAL</div>
-    <canvas id="analysisChart"></canvas>
-    <div class="progress"><span id="progressFill"></span></div>
-    <div id="analysisStatus">Connecting to strategy...</div>
-  </div>
 </div>
 
 <script>
+"use strict";
+
 /*
- * Existing YK Bot Supabase project and function names.
- * Do not place a Supabase service-role secret in browser code.
+ * YK BOT FRONTEND
+ * Supabase Edge Functions:
+ *   yk-verify-license
+ *   yk-multi-strategy
+ *
+ * Browser mein sirf publishable key use karein.
+ * Kabhi bhi Supabase service_role/secret key yahan na daalein.
  */
-const PROJECT_URL = "https://fnybcoirsjosoanneegt.supabase.co";
-const PUBLISHABLE_KEY = "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
-const STRATEGY_FUNCTION = "yk-multi-strategy";
 
-let analysisActive = false;
-let analysisTimer = null;
-let progressTimer = null;
-let chartTimer = null;
-let analysisProgress = 5;
+const SUPABASE_URL = "https://fnybcoirsjosoanneegt.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
 
-function getDeviceId(){
+const VERIFY_URL = SUPABASE_URL + "/functions/v1/yk-verify-license";
+const SIGNAL_URL = SUPABASE_URL + "/functions/v1/yk-multi-strategy";
+
+const $ = id => document.getElementById(id);
+
+let selectedTimeframe = "1m";
+let licenseVerified = false;
+let verifiedLicenseKey = "";
+let isGenerating = false;
+
+function updateClock() {
+  $("clock").textContent = new Date().toLocaleTimeString("en-GB", {
+    timeZone: "Asia/Karachi",
+    hour12: false
+  });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+function getDeviceId() {
   let id = localStorage.getItem("yk_device_id");
-  if(!id){
-    id = (window.crypto && crypto.randomUUID)
-      ? crypto.randomUUID()
-      : "yk-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+  if (!id) {
+    if (window.crypto && crypto.randomUUID) {
+      id = crypto.randomUUID();
+    } else {
+      id = "yk-" + Date.now().toString(36) + "-" +
+        Math.random().toString(36).slice(2, 12);
+    }
     localStorage.setItem("yk_device_id", id);
   }
   return id;
 }
 
-const verifyButton = document.getElementById("yk-verify-btn");
-
-verifyButton.addEventListener("click", async function(){
-  const key = document.getElementById("yk-license-key").value.trim();
-  const msg = document.getElementById("yk-license-message");
-
-  if(!key){
-    msg.textContent = "Pehle license key enter karein.";
-    return;
-  }
-
-  verifyButton.disabled = true;
-  msg.textContent = "License verify ho raha hai...";
-
-  try{
-    const response = await fetch(
-      PROJECT_URL + "/functions/v1/yk-verify-license",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": PUBLISHABLE_KEY,
-          "Authorization": "Bearer " + PUBLISHABLE_KEY
-        },
-        body: JSON.stringify({
-          license_key: key,
-          device_id: getDeviceId()
-        })
-      }
-    );
-
-    const result = await response.json();
-
-    if(response.ok && result.valid === true){
-      msg.textContent = "License valid! Plan: " + (result.plan || "Active") + ".";
-      document.getElementById("yk-dashboard").style.display = "block";
-      document.getElementById("yk-license-panel").style.display = "none";
-      window.scrollTo(0,0);
-      drawAllCharts();
-    }else{
-      msg.textContent = result.message || "License verify nahi ho saka.";
-      document.getElementById("yk-dashboard").style.display = "none";
-    }
-  }catch(error){
-    msg.textContent = "Connection error. Internet check karein.";
-  }finally{
-    verifyButton.disabled = false;
-  }
-});
-
-function ykLogout(){
-  stopAnalysis();
-  document.getElementById("yk-dashboard").style.display = "none";
-  document.getElementById("yk-license-panel").style.display = "block";
-  document.getElementById("yk-license-key").value = "";
-  document.getElementById("yk-license-message").textContent =
-    "Logout ho gaya. Dobara license enter karein.";
-  window.scrollTo(0,0);
+function apiHeaders() {
+  return {
+    "Content-Type": "application/json",
+    "apikey": SUPABASE_PUBLISHABLE_KEY,
+    "Authorization": "Bearer " + SUPABASE_PUBLISHABLE_KEY
+  };
 }
 
-/* Decorative candlestick chart: not real market data */
-function makeCandles(count){
-  const arr = [];
-  let price = 100;
-  for(let i=0;i<count;i++){
-    const open = price;
-    const close = open + (Math.random() - .5) * 8;
-    arr.push({
-      open, close,
-      high: Math.max(open,close) + Math.random()*4,
-      low: Math.min(open,close) - Math.random()*4
+async function postJson(url, body) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: apiHeaders(),
+    body: JSON.stringify(body)
+  });
+
+  let result;
+  try {
+    result = await response.json();
+  } catch (_) {
+    throw new Error("Server se valid JSON response nahi mila.");
+  }
+
+  if (!response.ok) {
+    throw new Error(result.message || result.error ||
+      ("Server error: " + response.status));
+  }
+  return result;
+}
+
+function showLicenseMessage(message, good = false) {
+  $("licenseMessage").textContent = message;
+  $("licenseMessage").style.color = good ? "var(--green)" : "var(--red)";
+}
+
+function resetSignal(message) {
+  $("signalWord").textContent = "WAIT";
+  $("signalWord").className = "signal-word";
+  $("signalSub").textContent = message || "Signal pending";
+  $("signalBox").className = "signal-box";
+  $("signalConfidence").textContent = "--";
+  $("confidence").textContent = "--";
+  $("trend").textContent = "Awaiting signal";
+  $("rsi").textContent = "--";
+  $("macd").textContent = "--";
+  $("support").textContent = "--";
+  $("resistance").textContent = "--";
+  $("analysisSignal").textContent = "WAIT";
+  $("analysisMessage").textContent = message || "Valid signal ka intezar hai.";
+  $("strategyStat").textContent = "Not run";
+}
+
+async function verifyLicense() {
+  const key = $("licenseKey").value.trim();
+  if (!key) {
+    showLicenseMessage("Pehle apni license key enter karein.");
+    return false;
+  }
+
+  $("verifyBtn").disabled = true;
+  $("verifyBtn").textContent = "Checking…";
+  showLicenseMessage("License verify ho raha hai…", true);
+
+  try {
+    const result = await postJson(VERIFY_URL, {
+      license_key: key,
+      device_id: getDeviceId()
     });
-    price = close;
+
+    if (result.valid === true) {
+      licenseVerified = true;
+      verifiedLicenseKey = key;
+      $("licenseStat").textContent = "Verified";
+      showLicenseMessage(
+        result.message || "License successfully verified.",
+        true
+      );
+      return true;
+    }
+
+    licenseVerified = false;
+    verifiedLicenseKey = "";
+    $("licenseStat").textContent = "Invalid";
+    showLicenseMessage(result.message || "License valid nahi hai.");
+    return false;
+
+  } catch (error) {
+    licenseVerified = false;
+    verifiedLicenseKey = "";
+    $("licenseStat").textContent = "Error";
+    showLicenseMessage("Verification error: " + error.message);
+    return false;
+
+  } finally {
+    $("verifyBtn").disabled = false;
+    $("verifyBtn").textContent = "Verify";
   }
-  return arr;
 }
 
-const candlesMain = makeCandles(34);
-const candlesAnalysis = makeCandles(28);
+$("verifyBtn").addEventListener("click", verifyLicense);
 
-function drawCandles(canvas, data){
-  if(!canvas || !data.length) return;
-  const ctx = canvas.getContext("2d");
-  const rect = canvas.getBoundingClientRect();
-  const w = rect.width, h = rect.height;
-  if(!w || !h) return;
+$("licenseKey").addEventListener("input", () => {
+  if ($("licenseKey").value.trim() !== verifiedLicenseKey) {
+    licenseVerified = false;
+    verifiedLicenseKey = "";
+    $("licenseStat").textContent = "Not verified";
+  }
+});
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = Math.round(w*dpr);
-  canvas.height = Math.round(h*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  ctx.clearRect(0,0,w,h);
+function updatePairDisplay() {
+  $("signalPair").textContent = $("pair").value;
+  $("signalMarket").textContent = $("marketType").value;
+}
 
-  ctx.strokeStyle = "rgba(95,145,190,.16)";
-  for(let i=1;i<6;i++){
-    const y = h*i/6;
-    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+function updateTimeframe(tf) {
+  selectedTimeframe = tf;
+  document.querySelectorAll(".tf-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tf === tf);
+  });
+  $("timeframeStat").textContent = tf;
+  $("signalTime").textContent = tf + " · " + $("expiry").value;
+  $("chartTf").value = tf.replace("m", "");
+}
+
+document.querySelectorAll(".tf-btn").forEach(btn => {
+  btn.addEventListener("click", () => updateTimeframe(btn.dataset.tf));
+});
+
+$("pair").addEventListener("change", () => {
+  updatePairDisplay();
+  const symbols = {
+    "EUR/USD": "FX:EURUSD",
+    "GBP/USD": "FX:GBPUSD",
+    "USD/JPY": "FX:USDJPY",
+    "AUD/USD": "FX:AUDUSD",
+    "USD/CHF": "FX:USDCHF"
+  };
+  $("chartPair").value = symbols[$("pair").value] || "FX:EURUSD";
+  updateChart();
+});
+
+$("marketType").addEventListener("change", updatePairDisplay);
+$("expiry").addEventListener("change", () => {
+  $("signalTime").textContent = selectedTimeframe + " · " + $("expiry").value;
+});
+
+function updateChart() {
+  const symbol = $("chartPair").value;
+  const interval = $("chartTf").value;
+  const url = "https://www.tradingview.com/widgetembed/?" +
+    "symbol=" + encodeURIComponent(symbol) +
+    "&interval=" + encodeURIComponent(interval) +
+    "&hidesidetoolbar=1&symboledit=1&saveimage=0" +
+    "&toolbarbg=%23071830&theme=dark&style=1" +
+    "&timezone=Asia%2FKarachi&withdateranges=1&hideideas=1";
+
+  $("chartFrame").src = url;
+}
+$("chartPair").addEventListener("change", () => {
+  const pairBySymbol = {
+    "FX:EURUSD": "EUR/USD",
+    "FX:GBPUSD": "GBP/USD",
+    "FX:USDJPY": "USD/JPY",
+    "FX:AUDUSD": "AUD/USD",
+    "FX:USDCHF": "USD/CHF"
+  };
+  $("pair").value = pairBySymbol[$("chartPair").value] || "EUR/USD";
+  updatePairDisplay();
+  updateChart();
+});
+$("chartTf").addEventListener("change", updateChart);
+
+function showAnalysis(result) {
+  const indicators = result.indicators || {};
+  const strategies = result.strategies || {};
+  const signal = String(result.signal || "WAIT").toUpperCase();
+
+  $("analysisSignal").textContent =
+    signal === "BUY" || signal === "SELL" ? signal : "WAIT";
+
+  if (indicators.rsi !== undefined) {
+    $("rsi").textContent = String(indicators.rsi);
+  }
+  if (indicators.macd !== undefined) {
+    $("macd").textContent = String(indicators.macd);
+  }
+  if (indicators.support !== undefined) {
+    $("support").textContent = String(indicators.support);
+  }
+  if (indicators.resistance !== undefined) {
+    $("resistance").textContent = String(indicators.resistance);
   }
 
-  const min = Math.min(...data.map(c=>c.low)) - 3;
-  const max = Math.max(...data.map(c=>c.high)) + 3;
-  const range = Math.max(max-min,1);
-  const y = v => h-12-((v-min)/range)*(h-24);
-  const gap = w/data.length;
-  const body = Math.max(2,gap*.52);
+  const strategyText = Object.values(strategies)
+    .filter(v => v !== null && v !== undefined)
+    .map(v => typeof v === "object" ? JSON.stringify(v) : String(v))
+    .join(" · ");
 
-  data.forEach((c,i)=>{
-    const x = i*gap + gap/2;
-    const up = c.close >= c.open;
-    ctx.strokeStyle = up ? "#45f0b0" : "#ff5277";
-    ctx.fillStyle = ctx.strokeStyle;
-    ctx.beginPath(); ctx.moveTo(x,y(c.high)); ctx.lineTo(x,y(c.low)); ctx.stroke();
-    const top = Math.min(y(c.open),y(c.close));
-    const bottom = Math.max(y(c.open),y(c.close));
-    ctx.fillRect(x-body/2,top,body,Math.max(2,bottom-top));
-  });
+  $("trend").textContent = strategyText
+    ? strategyText.slice(0, 90)
+    : "Strategy response received";
 
-  ctx.strokeStyle = "#46cfff";
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  data.forEach((c,i)=>{
-    const x = i*gap + gap/2;
-    if(i===0) ctx.moveTo(x,y(c.close));
-    else ctx.lineTo(x,y(c.close));
-  });
-  ctx.stroke();
+  $("analysisMessage").textContent =
+    result.message || "Analysis received from the signal backend.";
 }
 
-function drawAllCharts(){
-  drawCandles(document.getElementById("miniChart"), candlesMain);
-  if(analysisActive) drawCandles(document.getElementById("analysisChart"), candlesAnalysis);
-}
+async function generateSignal() {
+  if (isGenerating) return;
 
-function updateCandles(data){
-  const last = data[data.length-1];
-  const open = last.close;
-  const close = open + (Math.random()-.5)*8;
-  data.shift();
-  data.push({
-    open, close,
-    high: Math.max(open,close)+Math.random()*4,
-    low: Math.min(open,close)-Math.random()*4
-  });
-}
-
-chartTimer = setInterval(()=>{
-  updateCandles(candlesMain);
-  if(analysisActive) updateCandles(candlesAnalysis);
-  drawAllCharts();
-}, 900);
-
-window.addEventListener("resize", drawAllCharts);
-window.addEventListener("load", drawAllCharts);
-
-const analysisSteps = [
-  "Connecting to Supabase strategy...",
-  "Requesting market analysis...",
-  "Checking strategy response...",
-  "Preparing signal result..."
-];
-
-function startAnalysis(){
-  analysisActive = true;
-  analysisProgress = 5;
-  document.getElementById("analysisOverlay").classList.add("active");
-  document.getElementById("progressFill").style.width = "5%";
-  document.getElementById("analysisStatus").textContent = analysisSteps[0];
-
-  let step = 0;
-  analysisTimer = setInterval(()=>{
-    step = (step+1) % analysisSteps.length;
-    document.getElementById("analysisStatus").textContent = analysisSteps[step];
-  }, 900);
-
-  progressTimer = setInterval(()=>{
-    analysisProgress = Math.min(90, analysisProgress + Math.random()*7);
-    document.getElementById("progressFill").style.width = analysisProgress + "%";
-  }, 400);
-
-  drawAllCharts();
-}
-
-function stopAnalysis(){
-  analysisActive = false;
-  clearInterval(analysisTimer);
-  clearInterval(progressTimer);
-  document.getElementById("progressFill").style.width = "100%";
-  document.getElementById("analysisOverlay").classList.remove("active");
-}
-
-async function checkTradingSignal(){
-  const signalBox = document.getElementById("signal");
-  const messageBox = document.getElementById("message");
-  const strategyBox = document.getElementById("strategyDetails");
-  const button = document.getElementById("generateBtn");
-
-  const market = document.getElementById("market").value;
-  const pair = document.getElementById("pair").value;
-  const timeframe = document.getElementById("timeframe").value;
-  const licenseKey = document.getElementById("yk-license-key").value.trim();
-
-  if(market !== "Live Market" || pair !== "EUR/USD"){
-    signalBox.className = "signal wait";
-    signalBox.textContent = "⏳ WAIT";
-    messageBox.textContent = "Maujooda strategy filhal sirf EUR/USD Live Market ke liye configured hai.";
+  if (!licenseVerified || !verifiedLicenseKey) {
+    showLicenseMessage("Signal se pehle apni license key verify karein.");
+    $("license").scrollIntoView({ behavior: "smooth", block: "center" });
     return;
   }
 
-  if(button.disabled) return;
+  if ($("marketType").value === "OTC") {
+    resetSignal("OTC signals backend se configured nahi hain.");
+    $("analysisMessage").textContent =
+      "OTC mode ke liye separate, compatible data/strategy backend zaroori hai.";
+    return;
+  }
 
-  button.disabled = true;
-  signalBox.className = "signal wait";
-  signalBox.textContent = "⏳ ANALYZING...";
-  messageBox.textContent = "Supabase se signal request ho rahi hai...";
-  startAnalysis();
+  if ($("pair").value !== "EUR/USD") {
+    resetSignal("Is waqt backend ki confirmed pair support EUR/USD hai.");
+    $("analysisMessage").textContent =
+      "Backend ke current setup ke mutabiq EUR/USD select karein. Baqi pairs ke signals available assume nahi kiye ja sakte.";
+    return;
+  }
 
-  try{
-    const response = await fetch(
-      PROJECT_URL + "/functions/v1/" + STRATEGY_FUNCTION,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": PUBLISHABLE_KEY,
-          "Authorization": "Bearer " + PUBLISHABLE_KEY
-        },
-        body: JSON.stringify({
-          timeframe: timeframe,
-          license_key: licenseKey,
-          device_id: localStorage.getItem("yk_device_id")
-        })
-      }
-    );
+  isGenerating = true;
+  $("generate").disabled = true;
+  $("generate").textContent = "⏳ ANALYZING…";
+  $("strategyStat").textContent = "Running";
+  $("analysisMessage").textContent = "Backend se signal hasil kiya ja raha hai…";
 
-    const result = await response.json();
+  try {
+    const result = await postJson(SIGNAL_URL, {
+      timeframe: selectedTimeframe,
+      license_key: verifiedLicenseKey,
+      device_id: getDeviceId()
+    });
 
-    if(!response.ok || !result.success){
-      throw new Error(result.message || "Strategy request failed");
+    if (result.success !== true) {
+      throw new Error(result.message || "Backend signal generate nahi kar saka.");
     }
 
-    if(!["BUY","SELL","WAIT"].includes(result.signal)){
-      throw new Error("Unexpected signal response");
+    const signal = String(result.signal || "WAIT").toUpperCase();
+
+    if (!["BUY", "SELL", "WAIT"].includes(signal)) {
+      throw new Error("Backend ne unknown signal return kiya.");
     }
 
-    const icons = {BUY:"🟢", SELL:"🔴", WAIT:"⏳"};
-    signalBox.className = "signal " + result.signal.toLowerCase();
-    signalBox.textContent = icons[result.signal] + " " + result.signal;
+    $("signalWord").textContent =
+      signal === "BUY" ? "▲ CALL" :
+      signal === "SELL" ? "▼ PUT" : "WAIT";
 
-    if(result.strategies){
-      strategyBox.textContent =
-        "EMA + RSI: " + (result.strategies.ema_rsi ?? "N/A") +
-        " | MACD: " + (result.strategies.macd ?? "N/A") +
-        " | Support/Resistance: " + (result.strategies.support_resistance ?? "N/A");
-    }
+    $("signalWord").className =
+      "signal-word " + (signal === "BUY" ? "buy" : signal === "SELL" ? "sell" : "");
 
-    const ind = result.indicators || {};
-    messageBox.textContent =
-      "EMA 9: " + (ind.ema9 ?? "N/A") +
-      " | EMA 21: " + (ind.ema21 ?? "N/A") +
-      " | RSI: " + (ind.rsi ?? "N/A") +
-      " | MACD: " + (ind.macd ?? "N/A") +
-      " | Support: " + (ind.support ?? "N/A") +
-      " | Resistance: " + (ind.resistance ?? "N/A");
-  }catch(error){
-    signalBox.className = "signal wait";
-    signalBox.textContent = "⏳ WAIT";
-    messageBox.textContent = "Signal nahi mil saka. Connection ya strategy response check karein.";
-  }finally{
-    stopAnalysis();
-    button.disabled = false;
+    $("signalBox").className =
+      "signal-box " + (signal === "BUY" ? "call" : signal === "SELL" ? "put" : "");
+
+    $("signalSub").textContent =
+      signal === "BUY" ? "(BUY)" :
+      signal === "SELL" ? "(SELL)" : "No trade signal";
+
+    $("signalPair").textContent = $("pair").value;
+    $("signalTime").textContent = selectedTimeframe + " · " + $("expiry").value;
+    $("signalMarket").textContent = $("marketType").value;
+
+    /*
+     * Backend response does not currently provide a documented
+     * confidence score. Therefore no made-up percentage is displayed.
+     */
+    $("signalConfidence").textContent = "--";
+    $("confidence").textContent = "--";
+    $("strategyStat").textContent = "Completed";
+    showAnalysis(result);
+
+  } catch (error) {
+    resetSignal("Signal generate nahi ho saka.");
+    $("analysisMessage").textContent = error.message;
+    $("strategyStat").textContent = "Error";
+
+  } finally {
+    isGenerating = false;
+    $("generate").disabled = false;
+    $("generate").textContent = "⚡ GENERATE SIGNAL";
   }
 }
 
-document.getElementById("pair").addEventListener("change",function(){
-  document.getElementById("chartPairLabel").textContent =
-    this.value.replace("/"," / ") + " · DEMO";
+$("generate").addEventListener("click", generateSignal);
+
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".nav-btn").forEach(item =>
+      item.classList.remove("active")
+    );
+    btn.classList.add("active");
+    const target = $(btn.dataset.target);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 });
+
+$("settingsJump").addEventListener("click", () => {
+  $("license").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+updatePairDisplay();
+updateTimeframe("1m");
+resetSignal("License verify karke signal generate karein.");
 </script>
 </body>
 </html>
