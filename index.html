@@ -1,345 +1,956 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101827">
-  <title>YK Bot - Trading Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070d19">
+<title>YK BOT | Premium Trading Terminal</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #101827;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-
-    .container {
-      max-width: 500px;
-      margin: 30px auto;
-    }
-
-    h1 {
-      text-align: center;
-      color: #38e8a5;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #aab7ca;
-    }
-
-    .card {
-      background: #1c293b;
-      border: 1px solid #35445a;
-      border-radius: 16px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    label {
-      display: block;
-      margin: 16px 0 8px;
-    }
-
-    select, button {
-      width: 100%;
-      padding: 13px;
-      border-radius: 9px;
-      border: none;
-      font-size: 16px;
-    }
-
-    select {
-      background: #101827;
-      color: white;
-      border: 1px solid #52627a;
-    }
-
-    button {
-      margin-top: 18px;
-      background: #38e8a5;
-      color: #101827;
-      font-weight: bold;
-    }
-
-    .signal {
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      padding: 20px 5px;
-    }
-
-    .note {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #bac5d5;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 25px;
-      color: #8493a8;
-      font-size: 12px;
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+:root{
+ --bg:#070d19;
+ --panel:#101c30;
+ --line:#263c53;
+ --green:#25f5a1;
+ --red:#ff526d;
+ --gold:#ffce62;
+ --cyan:#46cfff;
+ --text:#eef6ff;
+ --muted:#9eb0c6;
+}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ font-family:Arial,sans-serif;
+ min-height:100vh;
+ overflow-x:hidden;
+}
+#bgCanvas{
+ position:fixed;
+ inset:0;
+ width:100%;
+ height:100%;
+ z-index:-2;
+ opacity:.28;
+ pointer-events:none;
+}
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ z-index:-1;
+ pointer-events:none;
+ background:
+ radial-gradient(circle at 50% 0%,#0b3d4b55,transparent 50%),
+ linear-gradient(180deg,#070d19b0,#070d19e8);
+}
+.container{
+ width:min(100%,620px);
+ margin:auto;
+ padding:22px 15px 45px;
+}
+.brand{
+ text-align:center;
+ padding:20px 0 12px;
+}
+.logo{
+ width:76px;
+ height:76px;
+ margin:auto;
+ display:grid;
+ place-items:center;
+ border-radius:23px;
+ background:linear-gradient(135deg,#103a3a,#101b34);
+ border:1px solid #28eaa87d;
+ box-shadow:0 0 32px #25f5a133;
+ font-size:37px;
+ animation:float 3s ease-in-out infinite;
+}
+@keyframes float{
+ 0%,100%{transform:translateY(0)}
+ 50%{transform:translateY(-7px)}
+}
+h1{
+ margin:15px 0 5px;
+ font-size:30px;
+ letter-spacing:4px;
+ color:var(--green);
+ text-shadow:0 0 25px #25f5a155;
+}
+.subtitle{
+ color:var(--muted);
+ font-size:12px;
+ letter-spacing:2px;
+}
+.statusline{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ margin:16px auto;
+ font-size:11px;
+ color:#c1d6e7;
+}
+.dot{
+ width:8px;
+ height:8px;
+ border-radius:50%;
+ background:var(--green);
+ box-shadow:0 0 12px var(--green);
+ animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+ 50%{opacity:.3}
+}
+.card{
+ background:linear-gradient(145deg,#132238ef,#0c1628f5);
+ border:1px solid #284259;
+ border-radius:20px;
+ padding:20px;
+ margin-top:18px;
+ box-shadow:0 15px 45px #0005;
+ backdrop-filter:blur(8px);
+}
+.card h2{
+ margin:0 0 18px;
+ font-size:17px;
+ color:#e8f8ff;
+}
+label{
+ display:block;
+ margin:15px 0 8px;
+ font-size:13px;
+ color:#b6c9dc;
+}
+select,input{
+ width:100%;
+ background:#081321;
+ border:1px solid #36516a;
+ color:white;
+ border-radius:11px;
+ padding:14px;
+ font-size:15px;
+ outline:none;
+}
+select:focus,input:focus{
+ border-color:var(--green);
+ box-shadow:0 0 0 2px #25f5a11b;
+}
+button{
+ width:100%;
+ border:0;
+ border-radius:12px;
+ padding:15px;
+ font-size:15px;
+ font-weight:bold;
+ cursor:pointer;
+ transition:.2s;
+}
+button:active{transform:scale(.98)}
+button:disabled{opacity:.55;cursor:wait}
+.primary{
+ margin-top:22px;
+ background:linear-gradient(100deg,#19d98c,#55ffc0);
+ color:#062219;
+ box-shadow:0 0 23px #25f5a133;
+}
+.logout{
+ margin-top:14px;
+ background:#19283c;
+ color:#d2dfed;
+ border:1px solid #38506b;
+}
+.note{
+ font-size:12px;
+ line-height:1.7;
+ color:var(--muted);
+}
+.terminal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin-bottom:12px;
+}
+.badge{
+ font-size:10px;
+ color:var(--green);
+ background:#0a3029;
+ border:1px solid #1b6e57;
+ padding:7px 10px;
+ border-radius:30px;
+}
+.chart-shell{
+ background:#07111e;
+ border:1px solid #25425b;
+ border-radius:14px;
+ overflow:hidden;
+ position:relative;
+}
+#miniChart{
+ display:block;
+ width:100%;
+ height:165px;
+}
+.chart-label{
+ position:absolute;
+ left:12px;
+ top:11px;
+ font-size:10px;
+ color:#b9d6e4;
+ letter-spacing:1px;
+}
+.chart-tag{
+ position:absolute;
+ right:10px;
+ top:10px;
+ font-size:9px;
+ color:#ffc96a;
+ background:#332615;
+ padding:5px 8px;
+ border-radius:7px;
+}
+.signal{
+ text-align:center;
+ font-size:38px;
+ font-weight:900;
+ letter-spacing:3px;
+ padding:20px 8px;
+ margin-top:15px;
+ border-radius:15px;
+ background:#0a1727;
+ border:1px solid #2c435c;
+}
+.signal.buy{
+ color:var(--green);
+ border-color:#25f5a180;
+ box-shadow:0 0 30px #25f5a122;
+ animation:appear .5s ease;
+}
+.signal.sell{
+ color:var(--red);
+ border-color:#ff526d80;
+ box-shadow:0 0 30px #ff526d22;
+ animation:appear .5s ease;
+}
+.signal.wait{
+ color:var(--gold);
+ animation:appear .5s ease;
+}
+@keyframes appear{
+ from{opacity:0;transform:scale(.9)}
+ to{opacity:1;transform:scale(1)}
+}
+#message,#strategyDetails{
+ overflow-wrap:anywhere;
+}
+#analysisOverlay{
+ position:fixed;
+ inset:0;
+ z-index:1000;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ background:#030913f5;
+ padding:15px;
+}
+#analysisOverlay.active{display:flex}
+.analysis-panel{
+ width:min(100%,540px);
+ background:linear-gradient(145deg,#12243a,#080f1e);
+ border:1px solid #2b8e78;
+ border-radius:22px;
+ padding:19px;
+ box-shadow:0 0 65px #1cff9930;
+}
+.analysis-title{
+ text-align:center;
+ color:var(--green);
+ font-weight:bold;
+ font-size:19px;
+ letter-spacing:2px;
+ margin-bottom:8px;
+}
+.analysis-sub{
+ text-align:center;
+ font-size:11px;
+ color:#b6c8d9;
+ margin-bottom:15px;
+}
+#analysisChart{
+ width:100%;
+ height:240px;
+ display:block;
+ background:#071321;
+ border:1px solid #29465e;
+ border-radius:12px;
+}
+.scanline{
+ height:3px;
+ background:linear-gradient(90deg,transparent,var(--green),transparent);
+ box-shadow:0 0 15px var(--green);
+ animation:scan 2s linear infinite;
+}
+@keyframes scan{
+ 0%{transform:translateY(-230px)}
+ 100%{transform:translateY(0)}
+}
+.progress{
+ height:6px;
+ border-radius:20px;
+ background:#23374b;
+ overflow:hidden;
+ margin:18px 0 12px;
+}
+.progress span{
+ display:block;
+ width:0;
+ height:100%;
+ background:linear-gradient(90deg,#20dc91,#52d5ff);
+ box-shadow:0 0 12px var(--green);
+ transition:width .35s;
+}
+#analysisStatus{
+ color:#d9e9f6;
+ text-align:center;
+ font-size:13px;
+ min-height:35px;
+}
+.analysis-note{
+ text-align:center;
+ color:#8fa9be;
+ font-size:10px;
+}
+#yk-license-panel{
+ width:min(92%,430px);
+ margin:10vh auto 30px;
+ padding:28px 22px;
+ background:linear-gradient(145deg,#14243a,#0b1525);
+ border:1px solid #2b6b65;
+ border-radius:22px;
+ text-align:center;
+ box-shadow:0 0 55px #13c8891b;
+}
+#yk-license-panel h2{
+ color:var(--green);
+ letter-spacing:2px;
+}
+#yk-license-panel input{
+ margin:13px 0 5px;
+}
+#yk-license-message{
+ font-size:13px;
+ color:#c4d6e7;
+ line-height:1.6;
+}
+footer{
+ text-align:center;
+ color:#748ba3;
+ font-size:11px;
+ margin-top:25px;
+}
+@media(prefers-reduced-motion:reduce){
+ .logo,.dot,.scanline{animation:none}
+}
+</style>
 </head>
 
 <body>
-  <div id="yk-dashboard" style="display:none;">
-  <main class="container">
-    <h1>🤖 YK BOT</h1>
-    <p class="subtitle">Trading Analysis Dashboard</p>
 
-    <section class="card">
-      <h2>Market Settings</h2>
+<canvas id="bgCanvas" aria-hidden="true"></canvas>
 
-      <label for="market">Market Type</label>
-      <select id="market">
-        <option>Live Market</option>
-        <option>OTC Market</option>
-      </select>
+<div id="yk-license-panel">
+ <div class="logo">🤖</div>
+ <h2>YK BOT</h2>
+ <p class="note">PREMIUM TRADING TERMINAL</p>
+ <p class="note">Enter your license key to access the dashboard.</p>
 
-      <label for="pair">Trading Pair</label>
-      <select id="pair">
-        <option>EUR/USD</option>
-        <option>GBP/USD</option>
-        <option>USD/JPY</option>
-        <option>AUD/USD</option>
-        <option>USD/CAD</option>
-        <option>EUR/GBP</option>
-        <option>EUR/USD OTC</option>
-        <option>GBP/USD OTC</option>
-        <option>USD/JPY OTC</option>
-      </select>
-<label for="timeframe">Trading Timeframe</label>
-<select id="timeframe">
+ <input id="yk-license-key"
+ type="text"
+ placeholder="Enter License Key"
+ autocomplete="off">
+
+ <button id="yk-verify-btn" class="primary">
+ 🔐 VERIFY LICENSE
+ </button>
+
+ <p id="yk-license-message" role="status"></p>
+</div>
+
+<div id="yk-dashboard" style="display:none">
+<main class="container">
+
+<header class="brand">
+ <div class="logo">🤖</div>
+ <h1>YK BOT</h1>
+ <div class="subtitle">PREMIUM TRADING TERMINAL</div>
+ <div class="statusline">
+  <span class="dot"></span>
+  <span>TRADING ANALYSIS SYSTEM</span>
+ </div>
+</header>
+
+<section class="card">
+ <div class="terminal-head">
+  <h2>📊 Market Overview</h2>
+  <span class="badge">ANIMATED DISPLAY</span>
+ </div>
+
+ <div class="chart-shell">
+  <span class="chart-label">EUR / USD</span>
+  <span class="chart-tag">VISUAL DEMO</span>
+  <canvas id="miniChart"></canvas>
+ </div>
+ <p class="note">
+  Animated chart is decorative and does not represent live prices.
+ </p>
+</section>
+
+<section class="card">
+ <h2>⚙️ Market Settings</h2>
+
+ <label for="market">Market Type</label>
+ <select id="market">
+  <option>Live Market</option>
+  <option>OTC Market</option>
+ </select>
+
+ <label for="pair">Trading Pair</label>
+ <select id="pair">
+  <option>EUR/USD</option>
+  <option>GBP/USD</option>
+  <option>USD/JPY</option>
+  <option>AUD/USD</option>
+  <option>USD/CAD</option>
+  <option>EUR/GBP</option>
+  <option>EUR/USD OTC</option>
+  <option>GBP/USD OTC</option>
+  <option>USD/JPY OTC</option>
+ </select>
+
+ <label for="timeframe">Trading Timeframe</label>
+ <select id="timeframe">
   <option value="1min">1 Minute</option>
   <option value="5min">5 Minutes</option>
-</select>
-      <label for="expiry">Expiry Time</label>
-      <select id="expiry">
-        <option value="5 seconds">5 seconds</option>
-        <option value="15 seconds">15 seconds</option>
-        <option value="30 seconds">30 seconds</option>
-        <option value="1 minute">1 minute</option>
-      </select>
-<button onclick="ykLogout()">Logout</button>
-      <button onclick="checkTradingSignal()">Check Live Signal (EMA + RSI)</button>
+ </select>
 
-      <div id="signal" class="signal">⏳ WAIT</div>
-      <p id="message" class="note">
-        Real market data connect hone ka intezar hai.
-      </p>
-      <p id="strategyDetails" class="note">
-  EMA + RSI: WAIT | MACD: WAIT | Support/Resistance: WAIT
-</p>
-    </section>
+ <label for="expiry">Expiry Time</label>
+ <select id="expiry">
+  <option value="5 seconds">5 seconds</option>
+  <option value="15 seconds">15 seconds</option>
+  <option value="30 seconds">30 seconds</option>
+  <option value="1 minute">1 minute</option>
+ </select>
 
-    <section class="card">
-      <h2>🔐 License Access</h2>
-      <p class="note">
-        License verification abhi configure nahi hui.
-        Is demo screen se paid access secure nahi hota.
-      </p>
-    </section>
+ <button id="generateBtn"
+ class="primary"
+ onclick="checkTradingSignal()">
+ 📡 GENERATE TRADING SIGNAL
+ </button>
 
-    <p class="note">
-      Risk warning: Yeh abhi dashboard ka demo hai.
-      Ismein real-time market data, verified trading signals
-      ya profitable strategy maujood nahi hai. CALL/PUT signal
-      generate nahi kiya ja raha.
-    </p>
+ <div id="signal" class="signal wait">⏳ WAIT</div>
 
-    <footer>YK Bot · Demo Version 0.1</footer>
-  </main>
+ <p id="message" class="note">
+  Ready to analyze market data.
+ </p>
+
+ <p id="strategyDetails" class="note">
+  EMA + RSI: WAIT | MACD: WAIT |
+  Support/Resistance: WAIT
+ </p>
+
+ <button class="logout" onclick="ykLogout()">
+ 🚪 LOGOUT
+ </button>
+</section>
+
+<section class="card">
+ <h2>🛡️ Trading Information</h2>
+ <p class="note">
+  Signals use the existing Supabase trading strategy.
+  Trading involves risk. No signal guarantees profit.
+  Always test with a demo account first.
+ </p>
+</section>
+
+<footer>
+ YK BOT • PREMIUM TRADING TERMINAL
+ <br><br>
+ Animated charts are visual effects, not live market data.
+</footer>
+
+</main>
+</div>
+
+<div id="analysisOverlay" role="status" aria-live="polite">
+ <div class="analysis-panel">
+  <div class="analysis-title">🤖 YK BOT ANALYSIS</div>
+  <div class="analysis-sub">
+   MARKET SIGNAL REQUEST IN PROGRESS
   </div>
-  <script>
-    function showStatus() {
-      document.getElementById("signal").textContent = "⏳ WAIT";
 
-      document.getElementById("message").textContent =
-        "Abhi real market data connect nahi hai. Isliye koi trading signal nahi diya ja raha.";
-    }
-  </script>
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("YK Bot Version 0.2 ready");
+  <canvas id="analysisChart"></canvas>
+  <div class="scanline"></div>
+
+  <div class="progress">
+   <span id="progressFill"></span>
+  </div>
+
+  <div id="analysisStatus">
+   Connecting to market...
+  </div>
+
+  <div class="analysis-note">
+   Visual animation • Signal calculated by Supabase
+  </div>
+ </div>
+</div>
+
+<script>
+const PROJECT_URL =
+ "https://fnybcoirsjosoanneegt.supabase.co";
+
+const PUBLISHABLE_KEY =
+ "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
+
+const STRATEGY_FUNCTION = "yk-multi-strategy";
+
+let analysisActive = false;
+let analysisTimer = null;
+let progressTimer = null;
+let analysisProgress = 0;
+
+function getDeviceId(){
+ let id = localStorage.getItem("yk_device_id");
+
+ if(!id){
+  id = crypto.randomUUID
+   ? crypto.randomUUID()
+   : "yk-" + Date.now() + "-" +
+     Math.random().toString(36).slice(2);
+
+  localStorage.setItem("yk_device_id",id);
+ }
+ return id;
+}
+
+const verifyButton =
+ document.getElementById("yk-verify-btn");
+
+verifyButton.addEventListener("click",async function(){
+ const key =
+  document.getElementById("yk-license-key")
+  .value.trim();
+
+ const msg =
+  document.getElementById("yk-license-message");
+
+ if(!key){
+  msg.textContent="Pehle license key enter karein.";
+  return;
+ }
+
+ verifyButton.disabled=true;
+ msg.textContent="License verify ho raha hai...";
+
+ try{
+  const response=await fetch(
+   PROJECT_URL+"/functions/v1/yk-verify-license",
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/json",
+     "apikey":PUBLISHABLE_KEY,
+     "Authorization":"Bearer "+PUBLISHABLE_KEY
+    },
+    body:JSON.stringify({
+     license_key:key,
+     device_id:getDeviceId()
+    })
+   }
+  );
+
+  const result=await response.json();
+
+  if(response.ok && result.valid===true){
+   msg.textContent=
+    "License valid! Plan: "+result.plan+".";
+
+   document.getElementById("yk-dashboard")
+    .style.display="block";
+
+   document.getElementById("yk-license-panel")
+    .style.display="none";
+
+   window.scrollTo(0,0);
+  }else{
+   msg.textContent=
+    result.message||"License verify nahi ho saka.";
+
+   document.getElementById("yk-dashboard")
+    .style.display="none";
+  }
+
+ }catch(error){
+  msg.textContent=
+   "Connection error. Internet check karein.";
+ }finally{
+  verifyButton.disabled=false;
+ }
+});
+
+function ykLogout(){
+ stopAnalysis();
+
+ document.getElementById("yk-dashboard")
+  .style.display="none";
+
+ document.getElementById("yk-license-panel")
+  .style.display="block";
+
+ document.getElementById("yk-license-key")
+  .value="";
+
+ document.getElementById("yk-license-message")
+  .textContent=
+  "Logout ho gaya. Dobara license enter karein.";
+
+ window.scrollTo(0,0);
+}
+
+/* DECORATIVE CANDLE CHARTS */
+
+function createCandles(count){
+ const candles=[];
+ let price=100;
+
+ for(let i=0;i<count;i++){
+  const open=price;
+  const close=open+(Math.random()-.5)*9;
+  const high=Math.max(open,close)+Math.random()*5;
+  const low=Math.min(open,close)-Math.random()*5;
+
+  candles.push({open,close,high,low});
+  price=close;
+ }
+
+ return candles;
+}
+
+let backgroundCandles=createCandles(55);
+let miniCandles=createCandles(32);
+let analysisCandles=createCandles(28);
+
+function drawCandles(canvas,candles,background=false){
+ if(!canvas)return;
+
+ const ctx=canvas.getContext("2d");
+ if(!ctx)return;
+
+ const rect=canvas.getBoundingClientRect();
+ const width=rect.width;
+ const height=rect.height;
+
+ if(width<1||height<1)return;
+
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ canvas.width=Math.round(width*dpr);
+ canvas.height=Math.round(height*dpr);
+
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ ctx.clearRect(0,0,width,height);
+
+ ctx.strokeStyle=background
+  ?"rgba(90,150,160,.12)"
+  :"rgba(80,130,160,.16)";
+
+ ctx.lineWidth=1;
+
+ for(let i=0;i<6;i++){
+  const y=i*height/5;
+  ctx.beginPath();
+  ctx.moveTo(0,y);
+  ctx.lineTo(width,y);
+  ctx.stroke();
+ }
+
+ const lows=candles.map(c=>c.low);
+ const highs=candles.map(c=>c.high);
+ const min=Math.min(...lows)-5;
+ const max=Math.max(...highs)+5;
+ const range=Math.max(max-min,1);
+
+ const y=v=>height-12-
+  ((v-min)/range)*(height-24);
+
+ const gap=width/candles.length;
+ const bodyWidth=Math.max(2,gap*.55);
+
+ candles.forEach((c,i)=>{
+  const x=i*gap+gap/2;
+  const up=c.close>=c.open;
+
+  ctx.strokeStyle=up?"#25f5a1":"#ff526d";
+  ctx.fillStyle=ctx.strokeStyle;
+
+  ctx.beginPath();
+  ctx.moveTo(x,y(c.high));
+  ctx.lineTo(x,y(c.low));
+  ctx.stroke();
+
+  const top=Math.min(y(c.open),y(c.close));
+  const bottom=Math.max(y(c.open),y(c.close));
+
+  ctx.fillRect(
+   x-bodyWidth/2,
+   top,
+   bodyWidth,
+   Math.max(2,bottom-top)
+  );
+ });
+
+ if(!background){
+  ctx.strokeStyle="#46cfff";
+  ctx.lineWidth=1.6;
+  ctx.beginPath();
+
+  candles.forEach((c,i)=>{
+   const start=Math.max(0,i-8);
+   const subset=candles.slice(start,i+1);
+   const avg=subset.reduce(
+    (sum,item)=>sum+item.close,0
+   )/subset.length;
+
+   const x=i*gap+gap/2;
+
+   if(i===0)ctx.moveTo(x,y(avg));
+   else ctx.lineTo(x,y(avg));
   });
-</script> 
-<div id="yk-license-panel" style="max-width:400px;margin:30px auto;padding:24px;background:#101827;color:white;border-radius:14px;font-family:Arial,sans-serif;text-align:center;">
-  <h2>YK Bot License</h2>
-  <p>Apni license key enter karein.</p>
-  <input id="yk-license-key" type="text" placeholder="Enter License Key"
-    style="width:90%;padding:12px;margin:10px 0;border-radius:7px;border:1px solid #555;">
-  <button id="yk-verify-btn"
-    style="width:98%;padding:12px;background:#16a34a;color:white;border:0;border-radius:7px;font-weight:bold;">
-    Verify License
-  </button>
-  <p id="yk-license-message" role="status"></p>
-</div><script>
-(function () {
-  const PROJECT_URL = "https://fnybcoirsjosoanneegt.supabase.co";
-  const PUBLISHABLE_KEY = "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
 
-  const button = document.getElementById("yk-verify-btn");
-  const message = document.getElementById("yk-license-message");
+  ctx.stroke();
+ }
+}
 
-  function getDeviceId() {
-    let id = localStorage.getItem("yk_device_id");
-    if (!id) {
-      id = (crypto.randomUUID)
-        ? crypto.randomUUID()
-        : "yk-" + Date.now() + "-" + Math.random().toString(36).slice(2);
-      localStorage.setItem("yk_device_id", id);
-    }
-    return id;
+function updateCandles(candles){
+ const last=candles[candles.length-1];
+ const open=last.close;
+ const close=open+(Math.random()-.5)*9;
+
+ candles.shift();
+ candles.push({
+  open,
+  close,
+  high:Math.max(open,close)+Math.random()*5,
+  low:Math.min(open,close)-Math.random()*5
+ });
+}
+
+function renderCharts(){
+ drawCandles(
+  document.getElementById("bgCanvas"),
+  backgroundCandles,true
+ );
+
+ drawCandles(
+  document.getElementById("miniChart"),
+  miniCandles
+ );
+
+ if(analysisActive){
+  drawCandles(
+   document.getElementById("analysisChart"),
+   analysisCandles
+  );
+ }
+}
+
+setInterval(()=>{
+ updateCandles(backgroundCandles);
+ updateCandles(miniCandles);
+
+ if(analysisActive){
+  updateCandles(analysisCandles);
+ }
+
+ renderCharts();
+},700);
+
+window.addEventListener("resize",renderCharts);
+window.addEventListener("load",renderCharts);
+
+/* ANALYSIS ANIMATION */
+
+const analysisSteps=[
+ "📡 Connecting to market data...",
+ "📊 Reading EUR/USD candles...",
+ "📈 Checking EMA indicators...",
+ "📉 Checking RSI and strategy conditions...",
+ "🧠 Waiting for trading signal response..."
+];
+
+function startAnalysis(){
+ analysisActive=true;
+ analysisProgress=5;
+
+ const overlay=
+  document.getElementById("analysisOverlay");
+
+ overlay.classList.add("active");
+
+ document.getElementById("progressFill")
+  .style.width="5%";
+
+ document.getElementById("analysisStatus")
+  .textContent=analysisSteps[0];
+
+ let step=0;
+
+ analysisTimer=setInterval(()=>{
+  step=(step+1)%analysisSteps.length;
+
+  document.getElementById("analysisStatus")
+   .textContent=analysisSteps[step];
+ },850);
+
+ progressTimer=setInterval(()=>{
+  analysisProgress=Math.min(
+   90,analysisProgress+Math.random()*8
+  );
+
+  document.getElementById("progressFill")
+   .style.width=analysisProgress+"%";
+ },400);
+
+ renderCharts();
+}
+
+function stopAnalysis(){
+ analysisActive=false;
+
+ clearInterval(analysisTimer);
+ clearInterval(progressTimer);
+
+ document.getElementById("progressFill")
+  .style.width="100%";
+
+ document.getElementById("analysisOverlay")
+  .classList.remove("active");
+}
+
+/* EXISTING SUPABASE SIGNAL SYSTEM */
+
+async function checkTradingSignal(){
+ const signalBox=document.getElementById("signal");
+ const messageBox=document.getElementById("message");
+ const strategyBox=
+  document.getElementById("strategyDetails");
+
+ const button=document.getElementById("generateBtn");
+
+ const market=document.getElementById("market").value;
+ const pair=document.getElementById("pair").value;
+ const timeframe=
+  document.getElementById("timeframe").value;
+
+ if(market!=="Live Market"||pair!=="EUR/USD"){
+  signalBox.className="signal wait";
+  signalBox.textContent="⏳ WAIT";
+
+  messageBox.textContent=
+   "Strategy filhal sirf EUR/USD Live Market ke liye hai.";
+  return;
+ }
+
+ if(button.disabled)return;
+
+ button.disabled=true;
+
+ signalBox.className="signal wait";
+ signalBox.textContent="⏳ ANALYZING...";
+
+ messageBox.textContent=
+  "Market data request chal rahi hai...";
+
+ startAnalysis();
+
+ try{
+  const response=await fetch(
+   PROJECT_URL+"/functions/v1/"+STRATEGY_FUNCTION,
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/json",
+     "apikey":PUBLISHABLE_KEY,
+     "Authorization":"Bearer "+PUBLISHABLE_KEY
+    },
+    body:JSON.stringify({
+     timeframe:timeframe,
+     license_key:
+      document.getElementById("yk-license-key")
+      .value.trim(),
+     device_id:
+      localStorage.getItem("yk_device_id")
+    })
+   }
+  );
+
+  const result=await response.json();
+
+  if(!response.ok||!result.success){
+   throw new Error(result.message||"Strategy error");
   }
 
-  button.addEventListener("click", async function () {
-    const licenseKey = document.getElementById("yk-license-key").value.trim();
-
-    if (!licenseKey) {
-      message.textContent = "Pehle license key enter karein.";
-      return;
-    }
-
-    if (PUBLISHABLE_KEY === "PASTE_YOUR_SUPABASE_PUBLISHABLE_KEY_HERE") {
-      message.textContent = "Setup pending: Publishable Key add karein.";
-      return;
-    }
-
-    button.disabled = true;
-    message.textContent = "License check ho raha hai...";
-
-    try {
-      const response = await fetch(
-        PROJECT_URL + "/functions/v1/yk-verify-license",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": PUBLISHABLE_KEY,
-            "Authorization": "Bearer " + PUBLISHABLE_KEY
-          },
-          body: JSON.stringify({
-            license_key: licenseKey,
-            device_id: getDeviceId()
-          })
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok && result.valid === true) {
-message.textContent =
-"License valid! Plan: " + result.plan + ".";
-document.getElementById("yk-dashboard").style.display = "block";
-} else {
-message.textContent =
-result.message || "License verify nahi ho saka.";
-document.getElementById("yk-dashboard").style.display = "none";
-}
-    } catch (error) {
-      message.textContent =
-        "Connection error. Internet aur settings check karein.";
-    } finally {
-      button.disabled = false;
-    }
-  });
-})();
-</script>
-  <script>
-async function checkTradingSignal() {
-  const signalBox = document.getElementById("signal");
-  const messageBox = document.getElementById("message");
-  const market = document.getElementById("market").value;
-  const pair = document.getElementById("pair").value;
-const timeframe = document.getElementById("timeframe").value;
-const strategyFunction = "yk-multi-strategy";
-  if (market !== "Live Market" || pair !== "EUR/USD") {
-    signalBox.textContent = "⏳ WAIT";
-    messageBox.textContent =
-      "EMA + RSI strategy filhal sirf EUR/USD Live Market ke liye hai.";
-    return;
+  if(!["BUY","SELL","WAIT"].includes(result.signal)){
+   throw new Error("Invalid signal");
   }
 
-  signalBox.textContent = "⏳ ANALYZING...";
-  messageBox.textContent = "Market data check ho raha hai...";
-
-  try {
-    const response = await fetch(
-    "https://fnybcoirsjosoanneegt.supabase.co/functions/v1/" + strategyFunction,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR",
-          "Authorization": "Bearer sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR"
-        },
-        body: JSON.stringify({
-  timeframe: timeframe,
-  license_key: document.getElementById("yk-license-key").value.trim(),
-  device_id: localStorage.getItem("yk_device_id")
-})
-      }
-    );
-
-    const result = await response.json();
-const strategyBox = document.getElementById("strategyDetails");
-
-if (strategyBox && result.strategies) {
-strategyBox.textContent =
-"EMA + RSI: " + result.strategies.ema_rsi +
-" | MACD: " + result.strategies.macd +
-" | Support/Resistance: " + result.strategies.support_resistance;
-}
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "Strategy error");
-    }
-
-    if (!["BUY", "SELL", "WAIT"].includes(result.signal)) {
-      throw new Error("Invalid signal");
-    }
-
-    const icons = {
-      BUY: "🟢",
-      SELL: "🔴",
-      WAIT: "⏳"
-    };
-
-    signalBox.textContent =
-      icons[result.signal] + " " + result.signal;
-
-messageBox.textContent =
-"EMA 9: " + (result.indicators?.ema9 ?? "N/A") +
-" | EMA 21: " + (result.indicators?.ema21 ?? "N/A") +
-" | RSI: " + (result.indicators?.rsi ?? "N/A") +
-" | MACD: " + (result.indicators?.macd ?? "N/A") +
-" | Support: " + (result.indicators?.support ?? "N/A") +
-" | Resistance: " + (result.indicators?.resistance ?? "N/A") +
-" | 3 Strategies (Experimental)";
-
-  } catch (error) {
-    signalBox.textContent = "⏳ WAIT";
-    messageBox.textContent =
-      "Market signal nahi mil saka. Dobara try karein.";
+  if(strategyBox&&result.strategies){
+   strategyBox.textContent=
+    "EMA + RSI: "+result.strategies.ema_rsi+
+    " | MACD: "+result.strategies.macd+
+    " | Support/Resistance: "+
+    result.strategies.support_resistance;
   }
+
+  const icons={
+   BUY:"🟢",
+   SELL:"🔴",
+   WAIT:"⏳"
+  };
+
+  signalBox.className=
+   "signal "+result.signal.toLowerCase();
+
+  signalBox.textContent=
+   icons[result.signal]+" "+result.signal;
+
+  const indicators=result.indicators||{};
+
+  messageBox.textContent=
+   "EMA 9: "+(indicators.ema9??"N/A")+
+   " | EMA 21: "+(indicators.ema21??"N/A")+
+   " | RSI: "+(indicators.rsi??"N/A")+
+   " | MACD: "+(indicators.macd??"N/A")+
+   " | Support: "+(indicators.support??"N/A")+
+   " | Resistance: "+(indicators.resistance??"N/A")+
+   " | 3 Strategies (Experimental)";
+
+ }catch(error){
+  signalBox.className="signal wait";
+  signalBox.textContent="⏳ WAIT";
+
+  messageBox.textContent=
+   "Market signal nahi mil saka. Dobara try karein.";
+
+ }finally{
+  stopAnalysis();
+  button.disabled=false;
+ }
 }
 </script>
-  <script>
-function ykLogout() {
-  document.getElementById("yk-dashboard").style.display = "none";
-  document.getElementById("yk-license-key").value = "";
-  document.getElementById("yk-license-message").textContent =
-    "Logout ho gaya. Dobara login karne ke liye license key enter karein.";
-  window.scrollTo(0, 0);
-}
-</script>
+
 </body>
 </html>
