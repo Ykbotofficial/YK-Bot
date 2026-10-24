@@ -355,6 +355,204 @@ footer{
 @media(prefers-reduced-motion:reduce){
  .logo,.dot,.scanline{animation:none}
 }
+ /* YK BOT - PREMIUM BLUE NEON THEME */
+:root {
+  --bg: #050b18;
+  --panel: #0b1730;
+  --line: #244b83;
+  --green: #38b6ff;
+  --red: #ff5277;
+  --gold: #ffd166;
+  --cyan: #56d8ff;
+  --text: #edf6ff;
+  --muted: #91a9c9;
+}
+
+body {
+  background: radial-gradient(ellipse at 50% 0%, #123c78 0%, transparent 48%), linear-gradient(160deg, #050b18, #071225 65%, #030712);
+  color: var(--text);
+}
+
+.logo {
+  background: linear-gradient(135deg, #123d80, #10172f);
+  border: 1px solid #399cff;
+  box-shadow: 0 0 32px #168bff45, inset 0 0 20px #168bff17;
+}
+
+h1 {
+  color: #65caff;
+  text-shadow: 0 0 24px #168bff88;
+}
+
+.card {
+  background: linear-gradient(145deg, #101f3bef, #091328f7);
+  border: 1px solid #244b83;
+  border-radius: 21px;
+  box-shadow: 0 15px 45px #0007, 0 0 18px #167bff0b;
+  backdrop-filter: blur(12px);
+  transition: border-color .25s, box-shadow .25s, transform .25s;
+}
+
+.card:hover {
+  border-color: #398cff;
+  box-shadow: 0 15px 45px #0008, 0 0 22px #168bff22;
+}
+
+.card h2 {
+  color: #e4f2ff;
+}
+
+label {
+  color: #a9c8ee;
+  font-weight: 600;
+}
+
+select,
+input {
+  background: linear-gradient(135deg, #071329, #0b1b35);
+  border: 1px solid #2b4f7e;
+  color: #f3f8ff;
+  border-radius: 13px;
+  padding: 15px;
+}
+
+select:focus,
+input:focus {
+  border-color: #48baff;
+  box-shadow: 0 0 0 3px #168bff22, 0 0 18px #168bff20;
+}
+
+button {
+  border-radius: 13px;
+  transition: transform .2s, box-shadow .2s, filter .2s;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+.primary {
+  background: linear-gradient(100deg, #1269ff, #28baff 55%, #657bff);
+  color: #fff;
+  border: 1px solid #76d4ff;
+  box-shadow: 0 0 25px #168bff44;
+}
+
+.primary:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 0 32px #168bff66;
+}
+
+.logout {
+  background: linear-gradient(135deg, #12233e, #0a1428);
+  color: #c8ddf7;
+  border: 1px solid #2b4f7e;
+}
+
+.badge {
+  color: #75d2ff;
+  background: #0b2a4c;
+  border: 1px solid #246ab0;
+}
+
+.chart-shell {
+  background: #061126;
+  border: 1px solid #28528b;
+  border-radius: 16px;
+}
+
+.chart-label {
+  color: #d3eaff;
+}
+
+.chart-tag {
+  color: #70d2ff;
+  background: #0c2b4b;
+  border: 1px solid #245d92;
+}
+
+.signal {
+  background: linear-gradient(145deg, #0a1930, #071124);
+  border: 1px solid #294a77;
+  border-radius: 16px;
+}
+
+.signal.buy {
+  color: #45f0b0;
+  border-color: #35dca0;
+  box-shadow: 0 0 25px #35dca022;
+}
+
+.signal.sell {
+  color: #ff6687;
+  border-color: #ff5277;
+  box-shadow: 0 0 25px #ff527722;
+}
+
+.signal.wait {
+  color: #ffd166;
+}
+
+#analysisOverlay {
+  background: #020712f5;
+  backdrop-filter: blur(12px);
+}
+
+.analysis-panel {
+  background: linear-gradient(145deg, #102447, #070f21);
+  border: 1px solid #328eff;
+  box-shadow: 0 0 55px #168bff30;
+}
+
+.analysis-title {
+  color: #6bcaff;
+  text-shadow: 0 0 18px #168bff55;
+}
+
+#analysisChart {
+  background: #061126;
+  border-color: #28528b;
+}
+
+.scanline {
+  background: linear-gradient(90deg, transparent, #48baff, transparent);
+  box-shadow: 0 0 15px #168bff;
+}
+
+.progress span {
+  background: linear-gradient(90deg, #1269ff, #38caff, #8b83ff);
+  box-shadow: 0 0 12px #168bff;
+}
+
+#yk-license-panel {
+  background: linear-gradient(145deg, #102447, #070f21);
+  border: 1px solid #328eff;
+  box-shadow: 0 0 55px #168bff25;
+}
+
+#yk-license-panel h2 {
+  color: #69caff;
+}
+
+footer {
+  color: #7e9cc3;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+    border-radius: 17px;
+  }
+
+  h1 {
+    font-size: 27px;
+    letter-spacing: 3px;
+  }
+
+  .signal {
+    font-size: 32px;
+  }
+}
 </style>
 </head>
 
