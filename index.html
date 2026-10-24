@@ -2,1153 +2,542 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#070d19">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071225">
 <title>YK BOT | Premium Trading Terminal</title>
 
 <style>
 *{box-sizing:border-box}
 :root{
- --bg:#070d19;
- --panel:#101c30;
- --line:#263c53;
- --green:#25f5a1;
- --red:#ff526d;
- --gold:#ffce62;
- --cyan:#46cfff;
- --text:#eef6ff;
- --muted:#9eb0c6;
+  --bg:#050b18;
+  --panel:#0b1730;
+  --line:#244b83;
+  --blue:#38b6ff;
+  --green:#45f0b0;
+  --red:#ff5277;
+  --gold:#ffd166;
+  --text:#edf6ff;
+  --muted:#91a9c9
 }
-html{scroll-behavior:smooth}
 body{
- margin:0;
- background:var(--bg);
- color:var(--text);
- font-family:Arial,sans-serif;
- min-height:100vh;
- overflow-x:hidden;
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  color:var(--text);
+  background:radial-gradient(ellipse at 50% 0%,#123c78,transparent 55%),linear-gradient(160deg,#050b18,#071225 65%,#030712);
 }
-#bgCanvas{
- position:fixed;
- inset:0;
- width:100%;
- height:100%;
- z-index:-2;
- opacity:.28;
- pointer-events:none;
-}
-body:before{
- content:"";
- position:fixed;
- inset:0;
- z-index:-1;
- pointer-events:none;
- background:
- radial-gradient(circle at 50% 0%,#0b3d4b55,transparent 50%),
- linear-gradient(180deg,#070d19b0,#070d19e8);
-}
-.container{
- width:min(100%,620px);
- margin:auto;
- padding:22px 15px 45px;
-}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.container{width:min(100% - 24px,1180px);margin:auto;padding:18px 0 40px}
 .brand{
- text-align:center;
- padding:20px 0 12px;
+  display:flex;align-items:center;gap:14px;
+  padding:12px 4px 20px;border-bottom:1px solid #244b8366;
+  margin-bottom:16px
 }
 .logo{
- width:76px;
- height:76px;
- margin:auto;
- display:grid;
- place-items:center;
- border-radius:23px;
- background:linear-gradient(135deg,#103a3a,#101b34);
- border:1px solid #28eaa87d;
- box-shadow:0 0 32px #25f5a133;
- font-size:37px;
- animation:float 3s ease-in-out infinite;
+  width:54px;height:54px;flex:0 0 54px;
+  display:grid;place-items:center;border-radius:16px;
+  background:linear-gradient(135deg,#123d80,#10172f);
+  border:1px solid #399cff;box-shadow:0 0 28px #168bff40;
+  font-size:27px
 }
-@keyframes float{
- 0%,100%{transform:translateY(0)}
- 50%{transform:translateY(-7px)}
-}
-h1{
- margin:15px 0 5px;
- font-size:30px;
- letter-spacing:4px;
- color:var(--green);
- text-shadow:0 0 25px #25f5a155;
-}
-.subtitle{
- color:var(--muted);
- font-size:12px;
- letter-spacing:2px;
-}
-.statusline{
- display:flex;
- align-items:center;
- justify-content:center;
- gap:8px;
- margin:16px auto;
- font-size:11px;
- color:#c1d6e7;
-}
-.dot{
- width:8px;
- height:8px;
- border-radius:50%;
- background:var(--green);
- box-shadow:0 0 12px var(--green);
- animation:pulse 1.5s infinite;
-}
-@keyframes pulse{
- 50%{opacity:.3}
-}
+h1{font-size:25px;letter-spacing:3px;color:#65caff;margin:0 0 5px}
+.subtitle{font-size:10px;color:var(--muted);letter-spacing:1.4px}
+.statusline{display:flex;gap:7px;align-items:center;margin-top:8px;font-size:10px;color:#a9c8ee}
+.dot{width:7px;height:7px;border-radius:50%;background:#45f0b0;box-shadow:0 0 10px #45f0b0}
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:16px;align-items:start}
 .card{
- background:linear-gradient(145deg,#132238ef,#0c1628f5);
- border:1px solid #284259;
- border-radius:20px;
- padding:20px;
- margin-top:18px;
- box-shadow:0 15px 45px #0005;
- backdrop-filter:blur(8px);
+  min-width:0;padding:20px;border-radius:19px;
+  background:linear-gradient(145deg,#101f3bef,#091328f7);
+  border:1px solid #244b83;box-shadow:0 15px 40px #0006;
+  margin-bottom:16px
 }
-.card h2{
- margin:0 0 18px;
- font-size:17px;
- color:#e8f8ff;
-}
-label{
- display:block;
- margin:15px 0 8px;
- font-size:13px;
- color:#b6c9dc;
-}
-select,input{
- width:100%;
- background:#081321;
- border:1px solid #36516a;
- color:white;
- border-radius:11px;
- padding:14px;
- font-size:15px;
- outline:none;
-}
-select:focus,input:focus{
- border-color:var(--green);
- box-shadow:0 0 0 2px #25f5a11b;
-}
-button{
- width:100%;
- border:0;
- border-radius:12px;
- padding:15px;
- font-size:15px;
- font-weight:bold;
- cursor:pointer;
- transition:.2s;
-}
-button:active{transform:scale(.98)}
-button:disabled{opacity:.55;cursor:wait}
-.primary{
- margin-top:22px;
- background:linear-gradient(100deg,#19d98c,#55ffc0);
- color:#062219;
- box-shadow:0 0 23px #25f5a133;
-}
-.logout{
- margin-top:14px;
- background:#19283c;
- color:#d2dfed;
- border:1px solid #38506b;
-}
-.note{
- font-size:12px;
- line-height:1.7;
- color:var(--muted);
-}
-.terminal-head{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- margin-bottom:12px;
-}
+.card h2{font-size:16px;margin:0 0 17px;color:#e4f2ff}
 .badge{
- font-size:10px;
- color:var(--green);
- background:#0a3029;
- border:1px solid #1b6e57;
- padding:7px 10px;
- border-radius:30px;
+  font-size:9px;padding:7px 9px;border-radius:8px;
+  color:#75d2ff;background:#0b2a4c;border:1px solid #246ab0
 }
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .chart-shell{
- background:#07111e;
- border:1px solid #25425b;
- border-radius:14px;
- overflow:hidden;
- position:relative;
+  position:relative;background:#061126;border:1px solid #28528b;
+  border-radius:14px;overflow:hidden
 }
-#miniChart{
- display:block;
- width:100%;
- height:165px;
+.chart-label{position:absolute;top:10px;left:11px;font-size:11px;color:#d3eaff;z-index:1}
+.chart-tag{position:absolute;right:10px;top:9px;font-size:9px;color:#70d2ff;z-index:1}
+#miniChart{width:100%;height:300px;display:block}
+label{display:block;margin:15px 0 7px;font-size:12px;font-weight:bold;color:#a9c8ee}
+input,select{
+  width:100%;padding:14px;border-radius:11px;
+  border:1px solid #2b4f7e;background:#071329;color:#f3f8ff;
+  outline:none
 }
-.chart-label{
- position:absolute;
- left:12px;
- top:11px;
- font-size:10px;
- color:#b9d6e4;
- letter-spacing:1px;
+input:focus,select:focus{border-color:#48baff;box-shadow:0 0 0 3px #168bff22}
+button{
+  border-radius:12px;padding:14px;width:100%;
+  border:1px solid transparent;font-weight:bold
 }
-.chart-tag{
- position:absolute;
- right:10px;
- top:10px;
- font-size:9px;
- color:#ffc96a;
- background:#332615;
- padding:5px 8px;
- border-radius:7px;
+.primary{
+  margin-top:20px;color:white;
+  background:linear-gradient(100deg,#1269ff,#28baff 55%,#657bff);
+  border-color:#76d4ff;box-shadow:0 0 22px #168bff35
 }
+.primary:disabled{opacity:.6;cursor:wait}
+.logout{margin-top:12px;background:#12233e;color:#c8ddf7;border-color:#2b4f7e}
 .signal{
- text-align:center;
- font-size:38px;
- font-weight:900;
- letter-spacing:3px;
- padding:20px 8px;
- margin-top:15px;
- border-radius:15px;
- background:#0a1727;
- border:1px solid #2c435c;
+  margin-top:16px;padding:23px 8px;text-align:center;
+  font-size:33px;font-weight:900;letter-spacing:2px;
+  border-radius:14px;background:#071124;border:1px solid #294a77
 }
-.signal.buy{
- color:var(--green);
- border-color:#25f5a180;
- box-shadow:0 0 30px #25f5a122;
- animation:appear .5s ease;
+.signal.buy{color:#45f0b0;border-color:#35dca0;box-shadow:0 0 25px #35dca022}
+.signal.sell{color:#ff6687;border-color:#ff5277;box-shadow:0 0 25px #ff527722}
+.signal.wait{color:#ffd166}
+.note{font-size:12px;line-height:1.7;color:var(--muted);overflow-wrap:anywhere}
+#yk-license-panel{
+  width:min(92%,430px);margin:9vh auto;padding:26px 22px;
+  background:linear-gradient(145deg,#102447,#070f21);
+  border:1px solid #328eff;border-radius:22px;text-align:center;
+  box-shadow:0 0 55px #168bff25
 }
-.signal.sell{
- color:var(--red);
- border-color:#ff526d80;
- box-shadow:0 0 30px #ff526d22;
- animation:appear .5s ease;
-}
-.signal.wait{
- color:var(--gold);
- animation:appear .5s ease;
-}
-@keyframes appear{
- from{opacity:0;transform:scale(.9)}
- to{opacity:1;transform:scale(1)}
-}
-#message,#strategyDetails{
- overflow-wrap:anywhere;
-}
+#yk-license-panel .logo{margin:auto}
+#yk-license-panel h2{color:#69caff;letter-spacing:2px}
+#yk-license-message{font-size:13px;line-height:1.6;color:#c4d6e7}
 #analysisOverlay{
- position:fixed;
- inset:0;
- z-index:1000;
- display:none;
- align-items:center;
- justify-content:center;
- background:#030913f5;
- padding:15px;
+  display:none;position:fixed;inset:0;z-index:1000;
+  align-items:center;justify-content:center;padding:15px;
+  background:#020712f5;backdrop-filter:blur(12px)
 }
 #analysisOverlay.active{display:flex}
 .analysis-panel{
- width:min(100%,540px);
- background:linear-gradient(145deg,#12243a,#080f1e);
- border:1px solid #2b8e78;
- border-radius:22px;
- padding:19px;
- box-shadow:0 0 65px #1cff9930;
+  width:min(100%,520px);padding:22px;border-radius:20px;
+  background:linear-gradient(145deg,#102447,#070f21);
+  border:1px solid #328eff;box-shadow:0 0 55px #168bff30
 }
-.analysis-title{
- text-align:center;
- color:var(--green);
- font-weight:bold;
- font-size:19px;
- letter-spacing:2px;
- margin-bottom:8px;
-}
-.analysis-sub{
- text-align:center;
- font-size:11px;
- color:#b6c8d9;
- margin-bottom:15px;
-}
-#analysisChart{
- width:100%;
- height:240px;
- display:block;
- background:#071321;
- border:1px solid #29465e;
- border-radius:12px;
-}
-.scanline{
- height:3px;
- background:linear-gradient(90deg,transparent,var(--green),transparent);
- box-shadow:0 0 15px var(--green);
- animation:scan 2s linear infinite;
-}
-@keyframes scan{
- 0%{transform:translateY(-230px)}
- 100%{transform:translateY(0)}
-}
-.progress{
- height:6px;
- border-radius:20px;
- background:#23374b;
- overflow:hidden;
- margin:18px 0 12px;
-}
-.progress span{
- display:block;
- width:0;
- height:100%;
- background:linear-gradient(90deg,#20dc91,#52d5ff);
- box-shadow:0 0 12px var(--green);
- transition:width .35s;
-}
-#analysisStatus{
- color:#d9e9f6;
- text-align:center;
- font-size:13px;
- min-height:35px;
-}
-.analysis-note{
- text-align:center;
- color:#8fa9be;
- font-size:10px;
-}
-#yk-license-panel{
- width:min(92%,430px);
- margin:10vh auto 30px;
- padding:28px 22px;
- background:linear-gradient(145deg,#14243a,#0b1525);
- border:1px solid #2b6b65;
- border-radius:22px;
- text-align:center;
- box-shadow:0 0 55px #13c8891b;
-}
-#yk-license-panel h2{
- color:var(--green);
- letter-spacing:2px;
-}
-#yk-license-panel input{
- margin:13px 0 5px;
-}
-#yk-license-message{
- font-size:13px;
- color:#c4d6e7;
- line-height:1.6;
-}
-footer{
- text-align:center;
- color:#748ba3;
- font-size:11px;
- margin-top:25px;
-}
-@media(prefers-reduced-motion:reduce){
- .logo,.dot,.scanline{animation:none}
-}
- /* YK BOT - PREMIUM BLUE NEON THEME */
-:root {
-  --bg: #050b18;
-  --panel: #0b1730;
-  --line: #244b83;
-  --green: #38b6ff;
-  --red: #ff5277;
-  --gold: #ffd166;
-  --cyan: #56d8ff;
-  --text: #edf6ff;
-  --muted: #91a9c9;
-}
-
-body {
-  background: radial-gradient(ellipse at 50% 0%, #123c78 0%, transparent 48%), linear-gradient(160deg, #050b18, #071225 65%, #030712);
-  color: var(--text);
-}
-
-.logo {
-  background: linear-gradient(135deg, #123d80, #10172f);
-  border: 1px solid #399cff;
-  box-shadow: 0 0 32px #168bff45, inset 0 0 20px #168bff17;
-}
-
-h1 {
-  color: #65caff;
-  text-shadow: 0 0 24px #168bff88;
-}
-
-.card {
-  background: linear-gradient(145deg, #101f3bef, #091328f7);
-  border: 1px solid #244b83;
-  border-radius: 21px;
-  box-shadow: 0 15px 45px #0007, 0 0 18px #167bff0b;
-  backdrop-filter: blur(12px);
-  transition: border-color .25s, box-shadow .25s, transform .25s;
-}
-
-.card:hover {
-  border-color: #398cff;
-  box-shadow: 0 15px 45px #0008, 0 0 22px #168bff22;
-}
-
-.card h2 {
-  color: #e4f2ff;
-}
-
-label {
-  color: #a9c8ee;
-  font-weight: 600;
-}
-
-select,
-input {
-  background: linear-gradient(135deg, #071329, #0b1b35);
-  border: 1px solid #2b4f7e;
-  color: #f3f8ff;
-  border-radius: 13px;
-  padding: 15px;
-}
-
-select:focus,
-input:focus {
-  border-color: #48baff;
-  box-shadow: 0 0 0 3px #168bff22, 0 0 18px #168bff20;
-}
-
-button {
-  border-radius: 13px;
-  transition: transform .2s, box-shadow .2s, filter .2s;
-}
-
-button:active {
-  transform: scale(.98);
-}
-
-.primary {
-  background: linear-gradient(100deg, #1269ff, #28baff 55%, #657bff);
-  color: #fff;
-  border: 1px solid #76d4ff;
-  box-shadow: 0 0 25px #168bff44;
-}
-
-.primary:hover {
-  filter: brightness(1.12);
-  box-shadow: 0 0 32px #168bff66;
-}
-
-.logout {
-  background: linear-gradient(135deg, #12233e, #0a1428);
-  color: #c8ddf7;
-  border: 1px solid #2b4f7e;
-}
-
-.badge {
-  color: #75d2ff;
-  background: #0b2a4c;
-  border: 1px solid #246ab0;
-}
-
-.chart-shell {
-  background: #061126;
-  border: 1px solid #28528b;
-  border-radius: 16px;
-}
-
-.chart-label {
-  color: #d3eaff;
-}
-
-.chart-tag {
-  color: #70d2ff;
-  background: #0c2b4b;
-  border: 1px solid #245d92;
-}
-
-.signal {
-  background: linear-gradient(145deg, #0a1930, #071124);
-  border: 1px solid #294a77;
-  border-radius: 16px;
-}
-
-.signal.buy {
-  color: #45f0b0;
-  border-color: #35dca0;
-  box-shadow: 0 0 25px #35dca022;
-}
-
-.signal.sell {
-  color: #ff6687;
-  border-color: #ff5277;
-  box-shadow: 0 0 25px #ff527722;
-}
-
-.signal.wait {
-  color: #ffd166;
-}
-
-#analysisOverlay {
-  background: #020712f5;
-  backdrop-filter: blur(12px);
-}
-
-.analysis-panel {
-  background: linear-gradient(145deg, #102447, #070f21);
-  border: 1px solid #328eff;
-  box-shadow: 0 0 55px #168bff30;
-}
-
-.analysis-title {
-  color: #6bcaff;
-  text-shadow: 0 0 18px #168bff55;
-}
-
-#analysisChart {
-  background: #061126;
-  border-color: #28528b;
-}
-
-.scanline {
-  background: linear-gradient(90deg, transparent, #48baff, transparent);
-  box-shadow: 0 0 15px #168bff;
-}
-
-.progress span {
-  background: linear-gradient(90deg, #1269ff, #38caff, #8b83ff);
-  box-shadow: 0 0 12px #168bff;
-}
-
-#yk-license-panel {
-  background: linear-gradient(145deg, #102447, #070f21);
-  border: 1px solid #328eff;
-  box-shadow: 0 0 55px #168bff25;
-}
-
-#yk-license-panel h2 {
-  color: #69caff;
-}
-
-footer {
-  color: #7e9cc3;
-}
-
-@media (max-width: 480px) {
-  .card {
-    padding: 16px;
-    border-radius: 17px;
-  }
-
-  h1 {
-    font-size: 27px;
-    letter-spacing: 3px;
-  }
-
-  .signal {
-    font-size: 32px;
-  }
+.analysis-title{text-align:center;font-size:19px;font-weight:bold;color:#69caff}
+.analysis-sub{text-align:center;color:var(--muted);font-size:10px;margin:9px 0 15px}
+#analysisChart{display:block;width:100%;height:210px;background:#061126;border:1px solid #28528b;border-radius:12px}
+.progress{height:6px;background:#23374b;border-radius:20px;overflow:hidden;margin:17px 0 12px}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#1269ff,#38caff,#8b83ff);transition:width .3s}
+#analysisStatus{text-align:center;min-height:34px;font-size:13px;color:#d9e9f6}
+footer{text-align:center;color:#7e9cc3;font-size:11px;padding:20px 0}
+@media(max-width:760px){
+ .container{width:calc(100% - 20px);padding-top:10px}
+ .layout{display:flex;flex-direction:column}
+ .layout>div{width:100%}
+ .card{padding:16px;border-radius:16px}
+ #miniChart{height:230px}
+ h1{font-size:22px;letter-spacing:2px}
+ .logo{width:48px;height:48px;flex-basis:48px;font-size:23px}
+ .signal{font-size:30px}
 }
 </style>
 </head>
 
 <body>
-
-<canvas id="bgCanvas" aria-hidden="true"></canvas>
-
 <div id="yk-license-panel">
- <div class="logo">🤖</div>
- <h2>YK BOT</h2>
- <p class="note">PREMIUM TRADING TERMINAL</p>
- <p class="note">Enter your license key to access the dashboard.</p>
-
- <input id="yk-license-key"
- type="text"
- placeholder="Enter License Key"
- autocomplete="off">
-
- <button id="yk-verify-btn" class="primary">
- 🔐 VERIFY LICENSE
- </button>
-
- <p id="yk-license-message" role="status"></p>
+  <div class="logo">🤖</div>
+  <h2>YK BOT</h2>
+  <p class="note">PREMIUM TRADING TERMINAL</p>
+  <p class="note">Enter your license key to unlock your dashboard.</p>
+  <input id="yk-license-key" type="text" placeholder="Enter License Key" autocomplete="off">
+  <button id="yk-verify-btn" class="primary">🔐 VERIFY LICENSE</button>
+  <p id="yk-license-message" role="status"></p>
 </div>
 
 <div id="yk-dashboard" style="display:none">
 <main class="container">
-
 <header class="brand">
- <div class="logo">🤖</div>
- <h1>YK BOT</h1>
- <div class="subtitle">PREMIUM TRADING TERMINAL</div>
- <div class="statusline">
-  <span class="dot"></span>
-  <span>TRADING ANALYSIS SYSTEM</span>
- </div>
+  <div class="logo">🤖</div>
+  <div>
+    <h1>YK BOT</h1>
+    <div class="subtitle">PREMIUM TRADING TERMINAL</div>
+    <div class="statusline"><span class="dot"></span> TRADING ANALYSIS SYSTEM</div>
+  </div>
 </header>
 
+<div class="layout">
+<div>
 <section class="card">
- <div class="terminal-head">
-  <h2>📊 Market Overview</h2>
-  <span class="badge">ANIMATED DISPLAY</span>
- </div>
-
- <div class="chart-shell">
-  <span class="chart-label">EUR / USD</span>
-  <span class="chart-tag">VISUAL DEMO</span>
-  <canvas id="miniChart"></canvas>
- </div>
- <p class="note">
-  Animated chart is decorative and does not represent live prices.
- </p>
+  <div class="headrow">
+    <h2>📊 Market Overview</h2>
+    <span class="badge">CHART DISPLAY</span>
+  </div>
+  <div class="chart-shell">
+    <span id="chartPairLabel" class="chart-label">EUR/USD · DEMO</span>
+    <span class="chart-tag">VISUAL DEMO</span>
+    <canvas id="miniChart"></canvas>
+  </div>
+  <p class="note">The animated chart is illustrative only and does not show live market prices.</p>
 </section>
 
 <section class="card">
- <h2>⚙️ Market Settings</h2>
-
- <label for="market">Market Type</label>
- <select id="market">
-  <option>Live Market</option>
-  <option>OTC Market</option>
- </select>
-
- <label for="pair">Trading Pair</label>
- <select id="pair">
-  <option>EUR/USD</option>
-  <option>GBP/USD</option>
-  <option>USD/JPY</option>
-  <option>AUD/USD</option>
-  <option>USD/CAD</option>
-  <option>EUR/GBP</option>
-  <option>EUR/USD OTC</option>
-  <option>GBP/USD OTC</option>
-  <option>USD/JPY OTC</option>
- </select>
-
- <label for="timeframe">Trading Timeframe</label>
- <select id="timeframe">
-  <option value="1min">1 Minute</option>
-  <option value="5min">5 Minutes</option>
- </select>
-
- <label for="expiry">Expiry Time</label>
- <select id="expiry">
-  <option value="5 seconds">5 seconds</option>
-  <option value="15 seconds">15 seconds</option>
-  <option value="30 seconds">30 seconds</option>
-  <option value="1 minute">1 minute</option>
- </select>
-
- <button id="generateBtn"
- class="primary"
- onclick="checkTradingSignal()">
- 📡 GENERATE TRADING SIGNAL
- </button>
-
- <div id="signal" class="signal wait">⏳ WAIT</div>
-
- <p id="message" class="note">
-  Ready to analyze market data.
- </p>
-
- <p id="strategyDetails" class="note">
-  EMA + RSI: WAIT | MACD: WAIT |
-  Support/Resistance: WAIT
- </p>
-
- <button class="logout" onclick="ykLogout()">
- 🚪 LOGOUT
- </button>
+  <h2>🧠 Trading Information</h2>
+  <p class="note">Signals are requested from your existing Supabase strategy. No signal guarantees profit. Test using a demo account first.</p>
+  <p id="strategyDetails" class="note">EMA + RSI: WAIT | MACD: WAIT | Support/Resistance: WAIT</p>
+  <p id="message" class="note">Ready to analyze market data.</p>
 </section>
+</div>
 
+<div>
 <section class="card">
- <h2>🛡️ Trading Information</h2>
- <p class="note">
-  Signals use the existing Supabase trading strategy.
-  Trading involves risk. No signal guarantees profit.
-  Always test with a demo account first.
- </p>
+  <h2>⚙️ Market Settings</h2>
+
+  <label for="market">Market Type</label>
+  <select id="market">
+    <option>Live Market</option>
+    <option>OTC Market</option>
+  </select>
+
+  <label for="pair">Trading Pair</label>
+  <select id="pair">
+    <option>EUR/USD</option>
+    <option>GBP/USD</option>
+    <option>USD/JPY</option>
+    <option>AUD/USD</option>
+    <option>USD/CAD</option>
+    <option>EUR/GBP</option>
+    <option>EUR/USD OTC</option>
+    <option>GBP/USD OTC</option>
+    <option>USD/JPY OTC</option>
+  </select>
+
+  <label for="timeframe">Trading Timeframe</label>
+  <select id="timeframe">
+    <option value="1min">1 Minute</option>
+    <option value="5min">5 Minutes</option>
+  </select>
+
+  <label for="expiry">Expiry Time</label>
+  <select id="expiry">
+    <option value="5 seconds">5 seconds</option>
+    <option value="15 seconds">15 seconds</option>
+    <option value="30 seconds">30 seconds</option>
+    <option value="1 minute">1 minute</option>
+  </select>
+
+  <button id="generateBtn" class="primary" onclick="checkTradingSignal()">📡 GENERATE TRADING SIGNAL</button>
+  <div id="signal" class="signal wait">⏳ WAIT</div>
+  <button class="logout" onclick="ykLogout()">🚪 LOGOUT</button>
 </section>
+</div>
+</div>
 
-<footer>
- YK BOT • PREMIUM TRADING TERMINAL
- <br><br>
- Animated charts are visual effects, not live market data.
-</footer>
-
+<footer>YK BOT • PREMIUM TRADING TERMINAL<br><br>Trading involves risk.</footer>
 </main>
 </div>
 
 <div id="analysisOverlay" role="status" aria-live="polite">
- <div class="analysis-panel">
-  <div class="analysis-title">🤖 YK BOT ANALYSIS</div>
-  <div class="analysis-sub">
-   MARKET SIGNAL REQUEST IN PROGRESS
+  <div class="analysis-panel">
+    <div class="analysis-title">🤖 YK BOT ANALYSIS</div>
+    <div class="analysis-sub">REQUESTING TRADING SIGNAL</div>
+    <canvas id="analysisChart"></canvas>
+    <div class="progress"><span id="progressFill"></span></div>
+    <div id="analysisStatus">Connecting to strategy...</div>
   </div>
-
-  <canvas id="analysisChart"></canvas>
-  <div class="scanline"></div>
-
-  <div class="progress">
-   <span id="progressFill"></span>
-  </div>
-
-  <div id="analysisStatus">
-   Connecting to market...
-  </div>
-
-  <div class="analysis-note">
-   Visual animation • Signal calculated by Supabase
-  </div>
- </div>
 </div>
 
 <script>
-const PROJECT_URL =
- "https://fnybcoirsjosoanneegt.supabase.co";
-
-const PUBLISHABLE_KEY =
- "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
-
+/*
+ * Existing YK Bot Supabase project and function names.
+ * Do not place a Supabase service-role secret in browser code.
+ */
+const PROJECT_URL = "https://fnybcoirsjosoanneegt.supabase.co";
+const PUBLISHABLE_KEY = "sb_publishable_Dwk9gV_7NB3c5UvvzollDw_0AoyACmR";
 const STRATEGY_FUNCTION = "yk-multi-strategy";
 
 let analysisActive = false;
 let analysisTimer = null;
 let progressTimer = null;
-let analysisProgress = 0;
+let chartTimer = null;
+let analysisProgress = 5;
 
 function getDeviceId(){
- let id = localStorage.getItem("yk_device_id");
-
- if(!id){
-  id = crypto.randomUUID
-   ? crypto.randomUUID()
-   : "yk-" + Date.now() + "-" +
-     Math.random().toString(36).slice(2);
-
-  localStorage.setItem("yk_device_id",id);
- }
- return id;
+  let id = localStorage.getItem("yk_device_id");
+  if(!id){
+    id = (window.crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : "yk-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+    localStorage.setItem("yk_device_id", id);
+  }
+  return id;
 }
 
-const verifyButton =
- document.getElementById("yk-verify-btn");
+const verifyButton = document.getElementById("yk-verify-btn");
 
-verifyButton.addEventListener("click",async function(){
- const key =
-  document.getElementById("yk-license-key")
-  .value.trim();
+verifyButton.addEventListener("click", async function(){
+  const key = document.getElementById("yk-license-key").value.trim();
+  const msg = document.getElementById("yk-license-message");
 
- const msg =
-  document.getElementById("yk-license-message");
-
- if(!key){
-  msg.textContent="Pehle license key enter karein.";
-  return;
- }
-
- verifyButton.disabled=true;
- msg.textContent="License verify ho raha hai...";
-
- try{
-  const response=await fetch(
-   PROJECT_URL+"/functions/v1/yk-verify-license",
-   {
-    method:"POST",
-    headers:{
-     "Content-Type":"application/json",
-     "apikey":PUBLISHABLE_KEY,
-     "Authorization":"Bearer "+PUBLISHABLE_KEY
-    },
-    body:JSON.stringify({
-     license_key:key,
-     device_id:getDeviceId()
-    })
-   }
-  );
-
-  const result=await response.json();
-
-  if(response.ok && result.valid===true){
-   msg.textContent=
-    "License valid! Plan: "+result.plan+".";
-
-   document.getElementById("yk-dashboard")
-    .style.display="block";
-
-   document.getElementById("yk-license-panel")
-    .style.display="none";
-
-   window.scrollTo(0,0);
-  }else{
-   msg.textContent=
-    result.message||"License verify nahi ho saka.";
-
-   document.getElementById("yk-dashboard")
-    .style.display="none";
+  if(!key){
+    msg.textContent = "Pehle license key enter karein.";
+    return;
   }
 
- }catch(error){
-  msg.textContent=
-   "Connection error. Internet check karein.";
- }finally{
-  verifyButton.disabled=false;
- }
+  verifyButton.disabled = true;
+  msg.textContent = "License verify ho raha hai...";
+
+  try{
+    const response = await fetch(
+      PROJECT_URL + "/functions/v1/yk-verify-license",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": PUBLISHABLE_KEY,
+          "Authorization": "Bearer " + PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({
+          license_key: key,
+          device_id: getDeviceId()
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if(response.ok && result.valid === true){
+      msg.textContent = "License valid! Plan: " + (result.plan || "Active") + ".";
+      document.getElementById("yk-dashboard").style.display = "block";
+      document.getElementById("yk-license-panel").style.display = "none";
+      window.scrollTo(0,0);
+      drawAllCharts();
+    }else{
+      msg.textContent = result.message || "License verify nahi ho saka.";
+      document.getElementById("yk-dashboard").style.display = "none";
+    }
+  }catch(error){
+    msg.textContent = "Connection error. Internet check karein.";
+  }finally{
+    verifyButton.disabled = false;
+  }
 });
 
 function ykLogout(){
- stopAnalysis();
-
- document.getElementById("yk-dashboard")
-  .style.display="none";
-
- document.getElementById("yk-license-panel")
-  .style.display="block";
-
- document.getElementById("yk-license-key")
-  .value="";
-
- document.getElementById("yk-license-message")
-  .textContent=
-  "Logout ho gaya. Dobara license enter karein.";
-
- window.scrollTo(0,0);
+  stopAnalysis();
+  document.getElementById("yk-dashboard").style.display = "none";
+  document.getElementById("yk-license-panel").style.display = "block";
+  document.getElementById("yk-license-key").value = "";
+  document.getElementById("yk-license-message").textContent =
+    "Logout ho gaya. Dobara license enter karein.";
+  window.scrollTo(0,0);
 }
 
-/* DECORATIVE CANDLE CHARTS */
-
-function createCandles(count){
- const candles=[];
- let price=100;
-
- for(let i=0;i<count;i++){
-  const open=price;
-  const close=open+(Math.random()-.5)*9;
-  const high=Math.max(open,close)+Math.random()*5;
-  const low=Math.min(open,close)-Math.random()*5;
-
-  candles.push({open,close,high,low});
-  price=close;
- }
-
- return candles;
+/* Decorative candlestick chart: not real market data */
+function makeCandles(count){
+  const arr = [];
+  let price = 100;
+  for(let i=0;i<count;i++){
+    const open = price;
+    const close = open + (Math.random() - .5) * 8;
+    arr.push({
+      open, close,
+      high: Math.max(open,close) + Math.random()*4,
+      low: Math.min(open,close) - Math.random()*4
+    });
+    price = close;
+  }
+  return arr;
 }
 
-let backgroundCandles=createCandles(55);
-let miniCandles=createCandles(32);
-let analysisCandles=createCandles(28);
+const candlesMain = makeCandles(34);
+const candlesAnalysis = makeCandles(28);
 
-function drawCandles(canvas,candles,background=false){
- if(!canvas)return;
+function drawCandles(canvas, data){
+  if(!canvas || !data.length) return;
+  const ctx = canvas.getContext("2d");
+  const rect = canvas.getBoundingClientRect();
+  const w = rect.width, h = rect.height;
+  if(!w || !h) return;
 
- const ctx=canvas.getContext("2d");
- if(!ctx)return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(w*dpr);
+  canvas.height = Math.round(h*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
 
- const rect=canvas.getBoundingClientRect();
- const width=rect.width;
- const height=rect.height;
+  ctx.strokeStyle = "rgba(95,145,190,.16)";
+  for(let i=1;i<6;i++){
+    const y = h*i/6;
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+  }
 
- if(width<1||height<1)return;
+  const min = Math.min(...data.map(c=>c.low)) - 3;
+  const max = Math.max(...data.map(c=>c.high)) + 3;
+  const range = Math.max(max-min,1);
+  const y = v => h-12-((v-min)/range)*(h-24);
+  const gap = w/data.length;
+  const body = Math.max(2,gap*.52);
 
- const dpr=Math.min(window.devicePixelRatio||1,2);
- canvas.width=Math.round(width*dpr);
- canvas.height=Math.round(height*dpr);
-
- ctx.setTransform(dpr,0,0,dpr,0,0);
- ctx.clearRect(0,0,width,height);
-
- ctx.strokeStyle=background
-  ?"rgba(90,150,160,.12)"
-  :"rgba(80,130,160,.16)";
-
- ctx.lineWidth=1;
-
- for(let i=0;i<6;i++){
-  const y=i*height/5;
-  ctx.beginPath();
-  ctx.moveTo(0,y);
-  ctx.lineTo(width,y);
-  ctx.stroke();
- }
-
- const lows=candles.map(c=>c.low);
- const highs=candles.map(c=>c.high);
- const min=Math.min(...lows)-5;
- const max=Math.max(...highs)+5;
- const range=Math.max(max-min,1);
-
- const y=v=>height-12-
-  ((v-min)/range)*(height-24);
-
- const gap=width/candles.length;
- const bodyWidth=Math.max(2,gap*.55);
-
- candles.forEach((c,i)=>{
-  const x=i*gap+gap/2;
-  const up=c.close>=c.open;
-
-  ctx.strokeStyle=up?"#25f5a1":"#ff526d";
-  ctx.fillStyle=ctx.strokeStyle;
-
-  ctx.beginPath();
-  ctx.moveTo(x,y(c.high));
-  ctx.lineTo(x,y(c.low));
-  ctx.stroke();
-
-  const top=Math.min(y(c.open),y(c.close));
-  const bottom=Math.max(y(c.open),y(c.close));
-
-  ctx.fillRect(
-   x-bodyWidth/2,
-   top,
-   bodyWidth,
-   Math.max(2,bottom-top)
-  );
- });
-
- if(!background){
-  ctx.strokeStyle="#46cfff";
-  ctx.lineWidth=1.6;
-  ctx.beginPath();
-
-  candles.forEach((c,i)=>{
-   const start=Math.max(0,i-8);
-   const subset=candles.slice(start,i+1);
-   const avg=subset.reduce(
-    (sum,item)=>sum+item.close,0
-   )/subset.length;
-
-   const x=i*gap+gap/2;
-
-   if(i===0)ctx.moveTo(x,y(avg));
-   else ctx.lineTo(x,y(avg));
+  data.forEach((c,i)=>{
+    const x = i*gap + gap/2;
+    const up = c.close >= c.open;
+    ctx.strokeStyle = up ? "#45f0b0" : "#ff5277";
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.beginPath(); ctx.moveTo(x,y(c.high)); ctx.lineTo(x,y(c.low)); ctx.stroke();
+    const top = Math.min(y(c.open),y(c.close));
+    const bottom = Math.max(y(c.open),y(c.close));
+    ctx.fillRect(x-body/2,top,body,Math.max(2,bottom-top));
   });
 
+  ctx.strokeStyle = "#46cfff";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  data.forEach((c,i)=>{
+    const x = i*gap + gap/2;
+    if(i===0) ctx.moveTo(x,y(c.close));
+    else ctx.lineTo(x,y(c.close));
+  });
   ctx.stroke();
- }
 }
 
-function updateCandles(candles){
- const last=candles[candles.length-1];
- const open=last.close;
- const close=open+(Math.random()-.5)*9;
-
- candles.shift();
- candles.push({
-  open,
-  close,
-  high:Math.max(open,close)+Math.random()*5,
-  low:Math.min(open,close)-Math.random()*5
- });
+function drawAllCharts(){
+  drawCandles(document.getElementById("miniChart"), candlesMain);
+  if(analysisActive) drawCandles(document.getElementById("analysisChart"), candlesAnalysis);
 }
 
-function renderCharts(){
- drawCandles(
-  document.getElementById("bgCanvas"),
-  backgroundCandles,true
- );
-
- drawCandles(
-  document.getElementById("miniChart"),
-  miniCandles
- );
-
- if(analysisActive){
-  drawCandles(
-   document.getElementById("analysisChart"),
-   analysisCandles
-  );
- }
+function updateCandles(data){
+  const last = data[data.length-1];
+  const open = last.close;
+  const close = open + (Math.random()-.5)*8;
+  data.shift();
+  data.push({
+    open, close,
+    high: Math.max(open,close)+Math.random()*4,
+    low: Math.min(open,close)-Math.random()*4
+  });
 }
 
-setInterval(()=>{
- updateCandles(backgroundCandles);
- updateCandles(miniCandles);
+chartTimer = setInterval(()=>{
+  updateCandles(candlesMain);
+  if(analysisActive) updateCandles(candlesAnalysis);
+  drawAllCharts();
+}, 900);
 
- if(analysisActive){
-  updateCandles(analysisCandles);
- }
+window.addEventListener("resize", drawAllCharts);
+window.addEventListener("load", drawAllCharts);
 
- renderCharts();
-},700);
-
-window.addEventListener("resize",renderCharts);
-window.addEventListener("load",renderCharts);
-
-/* ANALYSIS ANIMATION */
-
-const analysisSteps=[
- "📡 Connecting to market data...",
- "📊 Reading EUR/USD candles...",
- "📈 Checking EMA indicators...",
- "📉 Checking RSI and strategy conditions...",
- "🧠 Waiting for trading signal response..."
+const analysisSteps = [
+  "Connecting to Supabase strategy...",
+  "Requesting market analysis...",
+  "Checking strategy response...",
+  "Preparing signal result..."
 ];
 
 function startAnalysis(){
- analysisActive=true;
- analysisProgress=5;
+  analysisActive = true;
+  analysisProgress = 5;
+  document.getElementById("analysisOverlay").classList.add("active");
+  document.getElementById("progressFill").style.width = "5%";
+  document.getElementById("analysisStatus").textContent = analysisSteps[0];
 
- const overlay=
-  document.getElementById("analysisOverlay");
+  let step = 0;
+  analysisTimer = setInterval(()=>{
+    step = (step+1) % analysisSteps.length;
+    document.getElementById("analysisStatus").textContent = analysisSteps[step];
+  }, 900);
 
- overlay.classList.add("active");
+  progressTimer = setInterval(()=>{
+    analysisProgress = Math.min(90, analysisProgress + Math.random()*7);
+    document.getElementById("progressFill").style.width = analysisProgress + "%";
+  }, 400);
 
- document.getElementById("progressFill")
-  .style.width="5%";
-
- document.getElementById("analysisStatus")
-  .textContent=analysisSteps[0];
-
- let step=0;
-
- analysisTimer=setInterval(()=>{
-  step=(step+1)%analysisSteps.length;
-
-  document.getElementById("analysisStatus")
-   .textContent=analysisSteps[step];
- },850);
-
- progressTimer=setInterval(()=>{
-  analysisProgress=Math.min(
-   90,analysisProgress+Math.random()*8
-  );
-
-  document.getElementById("progressFill")
-   .style.width=analysisProgress+"%";
- },400);
-
- renderCharts();
+  drawAllCharts();
 }
 
 function stopAnalysis(){
- analysisActive=false;
-
- clearInterval(analysisTimer);
- clearInterval(progressTimer);
-
- document.getElementById("progressFill")
-  .style.width="100%";
-
- document.getElementById("analysisOverlay")
-  .classList.remove("active");
+  analysisActive = false;
+  clearInterval(analysisTimer);
+  clearInterval(progressTimer);
+  document.getElementById("progressFill").style.width = "100%";
+  document.getElementById("analysisOverlay").classList.remove("active");
 }
-
-/* EXISTING SUPABASE SIGNAL SYSTEM */
 
 async function checkTradingSignal(){
- const signalBox=document.getElementById("signal");
- const messageBox=document.getElementById("message");
- const strategyBox=
-  document.getElementById("strategyDetails");
+  const signalBox = document.getElementById("signal");
+  const messageBox = document.getElementById("message");
+  const strategyBox = document.getElementById("strategyDetails");
+  const button = document.getElementById("generateBtn");
 
- const button=document.getElementById("generateBtn");
+  const market = document.getElementById("market").value;
+  const pair = document.getElementById("pair").value;
+  const timeframe = document.getElementById("timeframe").value;
+  const licenseKey = document.getElementById("yk-license-key").value.trim();
 
- const market=document.getElementById("market").value;
- const pair=document.getElementById("pair").value;
- const timeframe=
-  document.getElementById("timeframe").value;
-
- if(market!=="Live Market"||pair!=="EUR/USD"){
-  signalBox.className="signal wait";
-  signalBox.textContent="⏳ WAIT";
-
-  messageBox.textContent=
-   "Strategy filhal sirf EUR/USD Live Market ke liye hai.";
-  return;
- }
-
- if(button.disabled)return;
-
- button.disabled=true;
-
- signalBox.className="signal wait";
- signalBox.textContent="⏳ ANALYZING...";
-
- messageBox.textContent=
-  "Market data request chal rahi hai...";
-
- startAnalysis();
-
- try{
-  const response=await fetch(
-   PROJECT_URL+"/functions/v1/"+STRATEGY_FUNCTION,
-   {
-    method:"POST",
-    headers:{
-     "Content-Type":"application/json",
-     "apikey":PUBLISHABLE_KEY,
-     "Authorization":"Bearer "+PUBLISHABLE_KEY
-    },
-    body:JSON.stringify({
-     timeframe:timeframe,
-     license_key:
-      document.getElementById("yk-license-key")
-      .value.trim(),
-     device_id:
-      localStorage.getItem("yk_device_id")
-    })
-   }
-  );
-
-  const result=await response.json();
-
-  if(!response.ok||!result.success){
-   throw new Error(result.message||"Strategy error");
+  if(market !== "Live Market" || pair !== "EUR/USD"){
+    signalBox.className = "signal wait";
+    signalBox.textContent = "⏳ WAIT";
+    messageBox.textContent = "Maujooda strategy filhal sirf EUR/USD Live Market ke liye configured hai.";
+    return;
   }
 
-  if(!["BUY","SELL","WAIT"].includes(result.signal)){
-   throw new Error("Invalid signal");
+  if(button.disabled) return;
+
+  button.disabled = true;
+  signalBox.className = "signal wait";
+  signalBox.textContent = "⏳ ANALYZING...";
+  messageBox.textContent = "Supabase se signal request ho rahi hai...";
+  startAnalysis();
+
+  try{
+    const response = await fetch(
+      PROJECT_URL + "/functions/v1/" + STRATEGY_FUNCTION,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": PUBLISHABLE_KEY,
+          "Authorization": "Bearer " + PUBLISHABLE_KEY
+        },
+        body: JSON.stringify({
+          timeframe: timeframe,
+          license_key: licenseKey,
+          device_id: localStorage.getItem("yk_device_id")
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if(!response.ok || !result.success){
+      throw new Error(result.message || "Strategy request failed");
+    }
+
+    if(!["BUY","SELL","WAIT"].includes(result.signal)){
+      throw new Error("Unexpected signal response");
+    }
+
+    const icons = {BUY:"🟢", SELL:"🔴", WAIT:"⏳"};
+    signalBox.className = "signal " + result.signal.toLowerCase();
+    signalBox.textContent = icons[result.signal] + " " + result.signal;
+
+    if(result.strategies){
+      strategyBox.textContent =
+        "EMA + RSI: " + (result.strategies.ema_rsi ?? "N/A") +
+        " | MACD: " + (result.strategies.macd ?? "N/A") +
+        " | Support/Resistance: " + (result.strategies.support_resistance ?? "N/A");
+    }
+
+    const ind = result.indicators || {};
+    messageBox.textContent =
+      "EMA 9: " + (ind.ema9 ?? "N/A") +
+      " | EMA 21: " + (ind.ema21 ?? "N/A") +
+      " | RSI: " + (ind.rsi ?? "N/A") +
+      " | MACD: " + (ind.macd ?? "N/A") +
+      " | Support: " + (ind.support ?? "N/A") +
+      " | Resistance: " + (ind.resistance ?? "N/A");
+  }catch(error){
+    signalBox.className = "signal wait";
+    signalBox.textContent = "⏳ WAIT";
+    messageBox.textContent = "Signal nahi mil saka. Connection ya strategy response check karein.";
+  }finally{
+    stopAnalysis();
+    button.disabled = false;
   }
-
-  if(strategyBox&&result.strategies){
-   strategyBox.textContent=
-    "EMA + RSI: "+result.strategies.ema_rsi+
-    " | MACD: "+result.strategies.macd+
-    " | Support/Resistance: "+
-    result.strategies.support_resistance;
-  }
-
-  const icons={
-   BUY:"🟢",
-   SELL:"🔴",
-   WAIT:"⏳"
-  };
-
-  signalBox.className=
-   "signal "+result.signal.toLowerCase();
-
-  signalBox.textContent=
-   icons[result.signal]+" "+result.signal;
-
-  const indicators=result.indicators||{};
-
-  messageBox.textContent=
-   "EMA 9: "+(indicators.ema9??"N/A")+
-   " | EMA 21: "+(indicators.ema21??"N/A")+
-   " | RSI: "+(indicators.rsi??"N/A")+
-   " | MACD: "+(indicators.macd??"N/A")+
-   " | Support: "+(indicators.support??"N/A")+
-   " | Resistance: "+(indicators.resistance??"N/A")+
-   " | 3 Strategies (Experimental)";
-
- }catch(error){
-  signalBox.className="signal wait";
-  signalBox.textContent="⏳ WAIT";
-
-  messageBox.textContent=
-   "Market signal nahi mil saka. Dobara try karein.";
-
- }finally{
-  stopAnalysis();
-  button.disabled=false;
- }
 }
-</script>
 
+document.getElementById("pair").addEventListener("change",function(){
+  document.getElementById("chartPairLabel").textContent =
+    this.value.replace("/"," / ") + " · DEMO";
+});
+</script>
 </body>
 </html>
