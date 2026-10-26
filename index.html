@@ -561,11 +561,12 @@ function showAnalysis(data){
   const analysis = data.analysis && typeof data.analysis === "object"
     ? data.analysis : data;
 
+  const indicators = data.indicators || analysis.indicators || analysis;
   const trend = getValue(analysis,["trend","market_trend"]);
-  const rsi = getValue(analysis,["rsi","RSI"]);
-  const macd = getValue(analysis,["macd","MACD"]);
-  const support = getValue(analysis,["support","support_level"]);
-  const resistance = getValue(analysis,["resistance","resistance_level"]);
+  const rsi = getValue(indicators,["rsi","RSI"]);
+  const macd = getValue(indicators,["macd","MACD"]);
+  const support = getValue(indicators,["support","support_level"]);
+  const resistance = getValue(indicators,["resistance","resistance_level"]);
   const message = getValue(analysis,["analysis_message","message","reason"]);
 
   if(trend !== null) $("trend").textContent = String(trend);
