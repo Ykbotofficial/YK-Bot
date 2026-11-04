@@ -806,14 +806,20 @@ $("generateButton").addEventListener("click",async()=>{
 
     $("strategyStatus").textContent = "Completed";
 
-    const confidence = data.confidence;
-    if(typeof confidence === "number" && confidence >= 0 && confidence <= 100){
-      $("confidence").textContent = confidence + "%";
-      $("signalConfidence").textContent = confidence + "%";
-    }else{
-      $("confidence").textContent = "--";
-      $("signalConfidence").textContent = "--";
-    }
+    const strategies = data.strategies || {};
+const votes = Object.values(strategies)
+  .filter(v => ["BUY","SELL","WAIT"].includes(String(v).toUpperCase()));
+
+const agreement = votes.filter(v =>
+  String(v).toUpperCase() === String(data.signal).toUpperCase()
+).length;
+
+const agreementText = votes.length
+  ? agreement + "/" + votes.length + " Agree"
+  : "N/A";
+
+$("confidence").textContent = agreementText;
+$("signalConfidence").textContent = agreementText;
 
     showAnalysis(data);
     setProgress(100);
